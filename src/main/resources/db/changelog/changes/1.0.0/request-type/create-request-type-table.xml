@@ -14,13 +14,10 @@
             <column name="type" type="VARCHAR(500)">
                 <constraints nullable="false" />
             </column>
-            <column name="label" type="VARCHAR(500)">
+            <column name="name" type="VARCHAR(500)">
                 <constraints nullable="false" />
             </column>
             <column name="context" type="VARCHAR(500)">
-                <constraints nullable="false" />
-            </column>
-            <column name="attachments_available" type="boolean">
                 <constraints nullable="false" />
             </column>
             <column name="status" type="VARCHAR(5)">
