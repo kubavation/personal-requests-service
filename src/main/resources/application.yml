@@ -1,0 +1,15 @@
+server:
+  port: 0
+spring:
+  application:
+    name: PERSONAL-REQUESTS-SERVICE
+  jpa:
+    show-sql: true
+  datasource:
+    url: jdbc:postgresql://localhost:5432/company-management
+    username: postgres
+    password: root
+
+
+application:
+  context: TEST
