@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext"
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.1.xsd
+    http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd">
+
+    <changeSet author="jdurys" id="1.0.0-request-type-field-table">
+        <createTable tableName="PR_REQUEST_TYPE_FIELD">
+            <column autoIncrement="true" name="id" type="bigint">
+                <constraints primaryKey="true"/>
+            </column>
+            <column name="request_type_id" type="bigint">
+                <constraints nullable="false" />
+            </column>
+            <column name="name" type="VARCHAR(500)">
+                <constraints nullable="false" />
+            </column>
+            <column name="type" type="VARCHAR(500)">
+                <constraints nullable="false" />
+            </column>
+            <column name="status" type="VARCHAR(5)">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+
+        <addForeignKeyConstraint baseTableName="PR_REQUEST_TYPE_FIELD"
+                                 baseColumnNames="request_type_id"
+                                 constraintName="request_type_id_fk"
+                                 referencedTableName="PR_REQUEST_TYPE"
+                                 referencedColumnNames="id" />
+    </changeSet>
+</databaseChangeLog>
