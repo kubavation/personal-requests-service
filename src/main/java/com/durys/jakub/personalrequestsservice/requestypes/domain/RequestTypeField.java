@@ -5,25 +5,25 @@ import jakarta.persistence.*;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.util.Set;
-
 @Entity
-@Table(name = "PR_REQUEST_TYPE")
+@Table(name = "PR_REQUEST_TYPE_FIELD")
 @NoArgsConstructor
 @Data
-public class RequestType {
+public class RequestTypeField {
 
     @Id
     private Long id;
 
-    @Enumerated(EnumType.STRING)
-    private Type type;
+    @ManyToOne
+    @JoinColumn(name = "request_type_id")
+    private RequestType requestType;
+
     private String name;
     private String context;
 
     @Enumerated(EnumType.STRING)
-    private Status status;
+    private FieldType type;
 
-    @OneToMany(mappedBy = "requestType")
-    private Set<RequestTypeField> fields;
+    @Enumerated(EnumType.STRING)
+    private Status status;
 }
