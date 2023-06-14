@@ -9,3 +9,7 @@ spring:
     url: jdbc:postgresql://localhost:5432/company-management
     username: postgres
     password: root
+
+
+application:
+  context: TEST
