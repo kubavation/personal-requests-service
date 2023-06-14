@@ -20,6 +20,6 @@ public class TestPersonalRequestFactory implements PersonalRequestFactory {
     }
 
     private TestRemoteWorkApplication createRemoteWorkApplication(RequestTypeRepository repository) {
-        return null;
+        return new TestRemoteWorkApplication();
     }
 }
