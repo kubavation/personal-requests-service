@@ -9,4 +9,6 @@
       http://www.liquibase.org/xml/ns/pro/liquibase-pro-4.1.xsd">
     <include file="request-type/create-request-type-table.xml"  relativeToChangelogFile="true" />
     <include file="request-type/create-request-type-field-table.xml"  relativeToChangelogFile="true" />
+    <include file="requests/create-personal-request-table.xml"  relativeToChangelogFile="true" />
+    <include file="requests/create-personal-request-fields-table.xml"  relativeToChangelogFile="true" />
 </databaseChangeLog>

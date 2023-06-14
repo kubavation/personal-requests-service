@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext"
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.1.xsd
+    http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd">
+
+    <changeSet author="jdurys" id="1.0.0-personal-request-fields-table">
+        <createTable tableName="PR_PERSONAL_REQUEST_FIELD">
+            <column autoIncrement="true" name="id" type="bigint">
+                <constraints primaryKey="true"/>
+            </column>
+            <column name="request_id" type="bigint">
+                <constraints nullable="false" />
+            </column>
+            <column name="request_field_type_id" type="bigint">
+                <constraints nullable="false" />
+            </column>
+            <column name="date_value" type="date" />
+            <column name="text_value" type="varchar(4000)" />
+            <column name="int_value" type="bigint" />
+            <column name="additional" type="varchar(4000)" />
+            <column name="status" type="VARCHAR(5)">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+
+        <addForeignKeyConstraint baseTableName="PR_PERSONAL_REQUEST_FIELD"
+                                 baseColumnNames="request_id"
+                                 constraintName="field-request_id_fk"
+                                 referencedTableName="PR_PERSONAL_REQUEST"
+                                 referencedColumnNames="id" />
+
+        <addForeignKeyConstraint baseTableName="PR_PERSONAL_REQUEST_FIELD"
+                                 baseColumnNames="request_field_type_id"
+                                 constraintName="requests-field-type_id_fk"
+                                 referencedTableName="PR_REQUEST_TYPE_FIELD"
+                                 referencedColumnNames="id" />
+
+    </changeSet>
+</databaseChangeLog>
