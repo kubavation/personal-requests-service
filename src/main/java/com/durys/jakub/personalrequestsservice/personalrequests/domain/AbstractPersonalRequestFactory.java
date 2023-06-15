@@ -10,7 +10,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class AbstractPersonalRequestFactory {
 
-    public static PersonalRequest instanceFrom(Context context, Type type, RequestTypeRepository repository) {
+    public static Requestable instanceFrom(Context context, Type type, RequestTypeRepository repository) {
         return switch (context.name()) {
             case "TEST" -> new TestPersonalRequestFactory(repository).instanceOf(type);
             default -> throw new UnsupportedOperationException();
