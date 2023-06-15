@@ -1,6 +1,6 @@
 package com.durys.jakub.personalrequestsservice.personalrequests.domain.contexts;
 
-import com.durys.jakub.personalrequestsservice.personalrequests.domain.contexts.test.requests.TestRemoteWorkApplication;
+import com.durys.jakub.personalrequestsservice.personalrequests.domain.contexts.test.requesttypes.TestRemoteWorkApplication;
 import com.fasterxml.jackson.annotation.JacksonAnnotationsInside;
 import com.fasterxml.jackson.annotation.JsonSubTypes;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
@@ -15,6 +15,6 @@ import java.lang.annotation.RetentionPolicy;
 @JsonSubTypes( {
         @JsonSubTypes.Type(value = TestRemoteWorkApplication.class, name = "remote-work-application")
 })
-public @interface TestRequestConfiguration {
+public @interface TestRequestsConfiguration {
 }
 
