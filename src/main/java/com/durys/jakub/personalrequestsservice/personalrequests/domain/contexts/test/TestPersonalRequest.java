@@ -2,7 +2,9 @@ package com.durys.jakub.personalrequestsservice.personalrequests.domain.contexts
 
 import com.durys.jakub.personalrequestsservice.personalrequests.domain.PersonalRequest;
 import com.durys.jakub.personalrequestsservice.personalrequests.domain.contexts.TestRequestConfiguration;
+import lombok.Data;
 
 @TestRequestConfiguration
+@Data
 public abstract class TestPersonalRequest implements PersonalRequest {
 }
