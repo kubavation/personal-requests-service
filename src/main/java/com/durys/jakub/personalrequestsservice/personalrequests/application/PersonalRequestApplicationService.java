@@ -3,7 +3,7 @@ package com.durys.jakub.personalrequestsservice.personalrequests.application;
 import com.durys.jakub.personalrequestsservice.context.Context;
 import com.durys.jakub.personalrequestsservice.context.ContextProvider;
 import com.durys.jakub.personalrequestsservice.personalrequests.domain.AbstractPersonalRequestFactory;
-import com.durys.jakub.personalrequestsservice.personalrequests.domain.PersonalRequest;
+import com.durys.jakub.personalrequestsservice.personalrequests.domain.Requestable;
 import com.durys.jakub.personalrequestsservice.requestypes.domain.Type;
 import com.durys.jakub.personalrequestsservice.requestypes.infrastructure.RequestTypeRepository;
 import lombok.RequiredArgsConstructor;
@@ -18,7 +18,7 @@ public class PersonalRequestApplicationService {
     private final ContextProvider contextProvider;
     private final RequestTypeRepository requestTypeRepository;
 
-    public PersonalRequest patternFor(Type type) {
+    public Requestable patternFor(Type type) {
 
         Context context = contextProvider.context();
 
