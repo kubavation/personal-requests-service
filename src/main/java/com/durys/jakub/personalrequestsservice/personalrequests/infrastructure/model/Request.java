@@ -4,9 +4,11 @@ import com.fasterxml.jackson.annotation.JsonAnyGetter;
 import com.fasterxml.jackson.annotation.JsonAnySetter;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.apache.commons.text.CaseUtils;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 @NoArgsConstructor
 @Data
@@ -28,6 +30,10 @@ public class Request {
 
     @JsonAnyGetter
     public Map<String, Object> getFields() {
-        return fields;
+        return fields.entrySet()
+                .stream()
+                .collect(Collectors
+                        .toMap(entry -> CaseUtils.toCamelCase(entry.getKey(), false, '_'),
+                                Map.Entry::getValue));
     }
 }
