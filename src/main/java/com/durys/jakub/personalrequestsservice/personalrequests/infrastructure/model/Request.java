@@ -1,5 +1,6 @@
 package com.durys.jakub.personalrequestsservice.personalrequests.infrastructure.model;
 
+import com.durys.jakub.personalrequestsservice.shared.converters.CamelCaseConverter;
 import com.fasterxml.jackson.annotation.JsonAnyGetter;
 import com.fasterxml.jackson.annotation.JsonAnySetter;
 import lombok.Data;
@@ -30,10 +31,6 @@ public class Request {
 
     @JsonAnyGetter
     public Map<String, Object> getFields() {
-        return fields.entrySet()
-                .stream()
-                .collect(Collectors
-                        .toMap(entry -> CaseUtils.toCamelCase(entry.getKey(), false, '_'),
-                                Map.Entry::getValue));
+        return CamelCaseConverter.camelcase(fields);
     }
 }
