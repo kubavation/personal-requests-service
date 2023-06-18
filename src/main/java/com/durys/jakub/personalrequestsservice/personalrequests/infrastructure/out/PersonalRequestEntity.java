@@ -2,6 +2,8 @@ package com.durys.jakub.personalrequestsservice.personalrequests.infrastructure.
 
 import com.durys.jakub.personalrequestsservice.shared.Status;
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -11,6 +13,8 @@ import java.util.Set;
 @Table(name = "PR_PERSONAL_REQUEST")
 @NoArgsConstructor
 @Data
+@Builder
+@AllArgsConstructor
 public class PersonalRequestEntity {
 
     @Id

@@ -14,13 +14,13 @@ import java.util.Map;
 public class PersonalRequest {
 
     private Long id;
-    private Long tenantId;
+    private String tenantId;
     private Long typeId;
 
 
     private Map<String, Object> fields = new HashMap<>();
 
-    public Map<String, Object> fields() {
+    public Map<String, Object> rawFields() {
         return fields;
     }
 
