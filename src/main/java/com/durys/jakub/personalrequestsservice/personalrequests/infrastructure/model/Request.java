@@ -15,6 +15,8 @@ public class Request {
 
     private Long id;
     private Long tenantId;
+    private Long typeId;
+
 
     private Map<String, Object> fields = new HashMap<>();
 
