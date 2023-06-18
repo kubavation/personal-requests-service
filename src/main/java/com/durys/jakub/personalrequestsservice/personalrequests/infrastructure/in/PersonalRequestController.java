@@ -11,13 +11,15 @@ import org.springframework.web.bind.annotation.RestController;
 
 @Slf4j
 @RestController
-@RequestMapping("/personal-requests-details")
+@RequestMapping("/personal-requests")
 @RequiredArgsConstructor
 public class PersonalRequestController {
 
     private final PersonalRequestApplicationService personalRequestApplicationService;
 
     @PostMapping
-    void save(@RequestBody Request personalRequest) {
+    void save(@RequestBody Request request) {
+        log.info(request.toString());
+        personalRequestApplicationService.save(request);
     }
 }

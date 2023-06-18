@@ -5,11 +5,9 @@ import com.fasterxml.jackson.annotation.JsonAnyGetter;
 import com.fasterxml.jackson.annotation.JsonAnySetter;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.apache.commons.text.CaseUtils;
 
 import java.util.HashMap;
 import java.util.Map;
-import java.util.stream.Collectors;
 
 @NoArgsConstructor
 @Data
