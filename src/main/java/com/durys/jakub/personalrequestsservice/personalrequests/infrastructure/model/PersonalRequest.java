@@ -11,7 +11,7 @@ import java.util.Map;
 
 @NoArgsConstructor
 @Data
-public class Request {
+public class PersonalRequest {
 
     private Long id;
     private Long tenantId;
