@@ -1,7 +1,6 @@
 package com.durys.jakub.personalrequestsservice.personalrequests.infrastructure.model;
 
 import com.durys.jakub.personalrequestsservice.personalrequests.infrastructure.converter.PersonalRequestFieldDefinitionConverter;
-import com.durys.jakub.personalrequestsservice.shared.converters.CamelCaseConverter;
 import com.fasterxml.jackson.annotation.JsonAnyGetter;
 import com.fasterxml.jackson.annotation.JsonAnySetter;
 import lombok.Data;
