@@ -8,6 +8,7 @@ import lombok.NoArgsConstructor;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Optional;
 
 @NoArgsConstructor
 @Data
@@ -17,11 +18,14 @@ public class PersonalRequest {
     private String tenantId;
     private Long typeId;
 
-
     private Map<String, Object> fields = new HashMap<>();
 
     public Map<String, Object> rawFields() {
         return PersonalRequestFieldDefinitionConverter.snakecase(fields);
+    }
+
+    public Optional<Object> fieldValue(String fieldName) {
+        return Optional.ofNullable(rawFields().get(fieldName));
     }
 
     @JsonAnySetter
