@@ -6,6 +6,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.Type;
 import org.springframework.http.RequestEntity;
 
 import java.util.Set;
@@ -19,6 +20,7 @@ import java.util.Set;
 public class PersonalRequestAttachmentEntity {
 
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @ManyToOne
@@ -33,4 +35,9 @@ public class PersonalRequestAttachmentEntity {
     @Enumerated(EnumType.STRING)
     private Status status;
 
+    public PersonalRequestAttachmentEntity(String fileName, byte[] file) {
+        this.fileName = fileName;
+        this.file = file;
+        this.status = Status.A;
+    }
 }

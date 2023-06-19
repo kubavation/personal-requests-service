@@ -18,6 +18,7 @@ import java.util.Set;
 public class PersonalRequestEntity {
 
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @Column(name = "request_type_id")
@@ -32,6 +33,6 @@ public class PersonalRequestEntity {
     @OneToMany(mappedBy = "request")
     private Set<PersonalRequestFieldEntity> fields;
 
-    @OneToMany(mappedBy = "request")
+    @OneToMany(mappedBy = "request", cascade = CascadeType.ALL)
     private Set<PersonalRequestAttachmentEntity> attachments;
 }
