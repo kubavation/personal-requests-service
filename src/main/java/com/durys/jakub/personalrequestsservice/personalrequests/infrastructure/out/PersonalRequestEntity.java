@@ -2,22 +2,22 @@ package com.durys.jakub.personalrequestsservice.personalrequests.infrastructure.
 
 import com.durys.jakub.personalrequestsservice.shared.Status;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import java.util.Set;
+import java.util.stream.Collectors;
 
 @Entity
 @Table(name = "PR_PERSONAL_REQUEST")
 @NoArgsConstructor
-@Data
+@Getter
+@Setter
 @Builder
 @AllArgsConstructor
 public class PersonalRequestEntity {
 
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @Column(name = "request_type_id")
@@ -29,6 +29,28 @@ public class PersonalRequestEntity {
     @Enumerated(EnumType.STRING)
     private Status status;
 
-    @OneToMany(mappedBy = "request")
+    @OneToMany(mappedBy = "request", cascade = CascadeType.ALL)
     private Set<PersonalRequestFieldEntity> fields;
+
+    @OneToMany(mappedBy = "request", cascade = CascadeType.ALL)
+    private Set<PersonalRequestAttachmentEntity> attachments;
+
+    public PersonalRequestEntity withAttachments(Set<PersonalRequestAttachmentEntity> attachments) {
+      this.attachments = attachments.stream()
+                .map(attachment -> {
+                    attachment.setRequest(this);
+                    return attachment;
+                }).collect(Collectors.toSet());
+      return this;
+    }
+
+    public PersonalRequestEntity withFields(Set<PersonalRequestFieldEntity> fields) {
+        this.fields = fields.stream()
+                .map(field -> {
+                    field.setRequest(this);
+                    return field;
+                }).collect(Collectors.toSet());
+        return this;
+    }
+
 }

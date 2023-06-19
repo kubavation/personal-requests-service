@@ -1,6 +1,6 @@
 package com.durys.jakub.personalrequestsservice.personalrequests.infrastructure.model;
 
-import com.durys.jakub.personalrequestsservice.shared.converters.CamelCaseConverter;
+import com.durys.jakub.personalrequestsservice.personalrequests.infrastructure.converter.PersonalRequestFieldDefinitionConverter;
 import com.fasterxml.jackson.annotation.JsonAnyGetter;
 import com.fasterxml.jackson.annotation.JsonAnySetter;
 import lombok.Data;
@@ -8,6 +8,7 @@ import lombok.NoArgsConstructor;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Optional;
 
 @NoArgsConstructor
 @Data
@@ -17,11 +18,14 @@ public class PersonalRequest {
     private String tenantId;
     private Long typeId;
 
-
     private Map<String, Object> fields = new HashMap<>();
 
     public Map<String, Object> rawFields() {
-        return fields;
+        return PersonalRequestFieldDefinitionConverter.snakecase(fields);
+    }
+
+    public Optional<Object> fieldValue(String fieldName) {
+        return Optional.ofNullable(rawFields().get(fieldName));
     }
 
     @JsonAnySetter
@@ -31,6 +35,6 @@ public class PersonalRequest {
 
     @JsonAnyGetter
     public Map<String, Object> getFields() {
-        return CamelCaseConverter.camelcase(fields);
+        return fields;
     }
 }
