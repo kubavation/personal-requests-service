@@ -20,7 +20,6 @@ public class RequestTypeField {
     private RequestType requestType;
 
     private String name;
-    private String context;
 
     @Enumerated(EnumType.STRING)
     private FieldType type;
