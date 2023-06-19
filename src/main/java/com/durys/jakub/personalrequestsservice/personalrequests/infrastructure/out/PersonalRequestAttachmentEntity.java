@@ -6,32 +6,31 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.springframework.http.RequestEntity;
 
 import java.util.Set;
 
 @Entity
-@Table(name = "PR_PERSONAL_REQUEST")
+@Table(name = "PR_PERSONAL_REQUEST_ATTACHMENT")
 @NoArgsConstructor
 @Data
 @Builder
 @AllArgsConstructor
-public class PersonalRequestEntity {
+public class PersonalRequestAttachmentEntity {
 
     @Id
     private Long id;
 
-    @Column(name = "request_type_id")
-    private Long requestTypeId;
+    @ManyToOne
+    @JoinColumn(name = "request_id")
+    private PersonalRequestEntity request;
 
-    @Column(name = "tenant_id")
-    private String tenantId;
+    @Column(name = "FILE_NAME")
+    private String fileName;
+
+    private byte[] file;
 
     @Enumerated(EnumType.STRING)
     private Status status;
 
-    @OneToMany(mappedBy = "request")
-    private Set<PersonalRequestFieldEntity> fields;
-
-    @OneToMany(mappedBy = "request")
-    private Set<PersonalRequestAttachmentEntity> attachments;
 }
