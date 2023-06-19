@@ -11,4 +11,5 @@
     <include file="request-type/create-request-type-field-table.xml"  relativeToChangelogFile="true" />
     <include file="requests/create-personal-request-table.xml"  relativeToChangelogFile="true" />
     <include file="requests/create-personal-request-fields-table.xml"  relativeToChangelogFile="true" />
+    <include file="requests/create-personal-request-attachment-table.xml"  relativeToChangelogFile="true" />
 </databaseChangeLog>
