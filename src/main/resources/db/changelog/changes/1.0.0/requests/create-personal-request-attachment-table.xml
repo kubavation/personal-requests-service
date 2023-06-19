@@ -15,7 +15,7 @@
                 <constraints nullable="false" />
             </column>
             <column name="file_name" type="varchar(500)" />
-            <column name="file" type="blob" />
+            <column name="file" type="bytea" />
             <column name="status" type="VARCHAR(5)">
                 <constraints nullable="false"/>
             </column>
