@@ -9,14 +9,7 @@ import java.util.stream.Collectors;
 
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class PersonalRequestFieldDefinitionConverter {
-
-    public static Map<String, Object> camelcase(Map<String, Object> map) {
-        return map.entrySet()
-                .stream()
-                .collect(Collectors
-                        .toMap(entry -> CaseFormat.UPPER_UNDERSCORE.to(CaseFormat.LOWER_CAMEL, entry.getKey()),
-                                Map.Entry::getValue));
-    }
+    
 
     public static Map<String, Object> snakecase(Map<String, Object> map) {
         return map.entrySet()
