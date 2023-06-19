@@ -31,6 +31,6 @@ public class PersonalRequest {
 
     @JsonAnyGetter
     public Map<String, Object> getFields() {
-        return PersonalRequestFieldDefinitionConverter.camelcase(fields);
+        return fields;
     }
 }
