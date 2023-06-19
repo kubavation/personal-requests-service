@@ -35,20 +35,22 @@ public class PersonalRequestEntity {
     @OneToMany(mappedBy = "request", cascade = CascadeType.ALL)
     private Set<PersonalRequestAttachmentEntity> attachments;
 
-    public void withAttachments(Set<PersonalRequestAttachmentEntity> attachments) {
+    public PersonalRequestEntity withAttachments(Set<PersonalRequestAttachmentEntity> attachments) {
       this.attachments = attachments.stream()
                 .map(attachment -> {
                     attachment.setRequest(this);
                     return attachment;
                 }).collect(Collectors.toSet());
+      return this;
     }
 
-    public void withFields(Set<PersonalRequestFieldEntity> fields) {
+    public PersonalRequestEntity withFields(Set<PersonalRequestFieldEntity> fields) {
         this.fields = fields.stream()
                 .map(field -> {
                     field.setRequest(this);
                     return field;
                 }).collect(Collectors.toSet());
+        return this;
     }
 
 }
