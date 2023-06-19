@@ -19,7 +19,7 @@ public class PersonalRequestFieldConverter {
         entity.setStatus(Status.A);
 
         return switch (definition.getType()) {
-            case DATE -> entity.withDateValue((LocalDate) value);
+            case DATE -> entity.withDateValue(LocalDate.parse(value.toString()));
             case TEXT -> entity.withTextValue(value.toString());
             case NUMBER -> entity.withIntValue((Long) value);
         };
