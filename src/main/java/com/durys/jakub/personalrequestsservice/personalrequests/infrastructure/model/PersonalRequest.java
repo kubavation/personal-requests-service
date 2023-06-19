@@ -1,5 +1,6 @@
 package com.durys.jakub.personalrequestsservice.personalrequests.infrastructure.model;
 
+import com.durys.jakub.personalrequestsservice.personalrequests.infrastructure.converter.PersonalRequestFieldDefinitionConverter;
 import com.durys.jakub.personalrequestsservice.shared.converters.CamelCaseConverter;
 import com.fasterxml.jackson.annotation.JsonAnyGetter;
 import com.fasterxml.jackson.annotation.JsonAnySetter;
@@ -21,7 +22,7 @@ public class PersonalRequest {
     private Map<String, Object> fields = new HashMap<>();
 
     public Map<String, Object> rawFields() {
-        return fields;
+        return PersonalRequestFieldDefinitionConverter.snakecase(fields);
     }
 
     @JsonAnySetter
@@ -31,6 +32,6 @@ public class PersonalRequest {
 
     @JsonAnyGetter
     public Map<String, Object> getFields() {
-        return CamelCaseConverter.camelcase(fields);
+        return PersonalRequestFieldDefinitionConverter.camelcase(fields);
     }
 }
