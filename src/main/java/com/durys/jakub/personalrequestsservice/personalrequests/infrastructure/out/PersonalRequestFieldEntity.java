@@ -52,4 +52,10 @@ public class PersonalRequestFieldEntity {
         this.intValue = value;
         return this;
     }
+
+    public PersonalRequestFieldEntity withRequest(PersonalRequestEntity personalRequest) {
+        this.request = personalRequest;
+        return this;
+    }
+
 }

@@ -37,19 +37,15 @@ public class PersonalRequestEntity {
 
     public PersonalRequestEntity withAttachments(Set<PersonalRequestAttachmentEntity> attachments) {
       this.attachments = attachments.stream()
-                .map(attachment -> {
-                    attachment.setRequest(this);
-                    return attachment;
-                }).collect(Collectors.toSet());
+              .map(attachment -> attachment.withRequest(this))
+              .collect(Collectors.toSet());
       return this;
     }
 
     public PersonalRequestEntity withFields(Set<PersonalRequestFieldEntity> fields) {
         this.fields = fields.stream()
-                .map(field -> {
-                    field.setRequest(this);
-                    return field;
-                }).collect(Collectors.toSet());
+                .map(field -> field.withRequest(this))
+                .collect(Collectors.toSet());
         return this;
     }
 

@@ -40,4 +40,9 @@ public class PersonalRequestAttachmentEntity {
         this.file = file;
         this.status = Status.A;
     }
+
+    public PersonalRequestAttachmentEntity withRequest(PersonalRequestEntity personalRequest) {
+        this.request = personalRequest;
+        return this;
+    }
 }
