@@ -20,4 +20,32 @@ class PersonalRequestFieldConverterTest {
 
         assertEquals(LocalDate.of(2023, 1, 1), result.getDateValue());
     }
+
+    @Test
+    void shouldConvertValueToLong() {
+        RequestTypeField requestTypeField = new RequestTypeField();
+        requestTypeField.setType(FieldType.NUMBER);
+
+        PersonalRequestFieldEntity result = PersonalRequestFieldConverter.convert(requestTypeField, 1);
+
+        assertEquals(1, result.getIntValue());
+    }
+
+    @Test
+    void shouldConvertValueToText() {
+        RequestTypeField requestTypeField = new RequestTypeField();
+        requestTypeField.setType(FieldType.TEXT);
+
+        PersonalRequestFieldEntity result = PersonalRequestFieldConverter.convert(requestTypeField, "TEST");
+
+        assertEquals("TEST", result.getTextValue());
+    }
+
+    @Test
+    void shouldNotThrowException_whenProvidedValueIsNull() {
+        RequestTypeField requestTypeField = new RequestTypeField();
+        requestTypeField.setType(FieldType.TEXT);
+
+        assertDoesNotThrow(() -> PersonalRequestFieldConverter.convert(requestTypeField, null));
+    }
 }
