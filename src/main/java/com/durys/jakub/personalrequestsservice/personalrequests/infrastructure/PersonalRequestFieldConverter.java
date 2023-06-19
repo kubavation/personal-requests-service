@@ -18,12 +18,11 @@ public class PersonalRequestFieldConverter {
         entity.setRequestFieldTypeId(definition.getId());
         entity.setStatus(Status.A);
 
-        switch (definition.getType()) {
-            case DATE -> entity.setDateValue((LocalDate) value);
-            case TEXT -> entity.setTextValue(value.toString());
-            case NUMBER -> entity.setIntValue((Long) value);
-        }
-        return entity;
+        return switch (definition.getType()) {
+            case DATE -> entity.withDateValue((LocalDate) value);
+            case TEXT -> entity.withTextValue(value.toString());
+            case NUMBER -> entity.withIntValue((Long) value);
+        };
     }
 
 }
