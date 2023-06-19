@@ -1,13 +1,21 @@
 package com.durys.jakub.personalrequestsservice.personalrequests.infrastructure.in;
 
 import com.durys.jakub.personalrequestsservice.personalrequests.application.PersonalRequestApplicationService;
+import com.durys.jakub.personalrequestsservice.personalrequests.infrastructure.PersonalRequestAttachmentRepository;
 import com.durys.jakub.personalrequestsservice.personalrequests.infrastructure.model.PersonalRequest;
+import com.durys.jakub.personalrequestsservice.personalrequests.infrastructure.out.PersonalRequestAttachmentEntity;
+import com.google.common.io.ByteSource;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.core.io.InputStreamResource;
+import org.springframework.core.io.Resource;
 import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.io.ByteArrayInputStream;
+import java.io.FileInputStream;
 import java.util.Arrays;
 import java.util.List;
 
@@ -19,6 +27,7 @@ import java.util.List;
 public class PersonalRequestController {
 
     private final PersonalRequestApplicationService personalRequestApplicationService;
+    private final PersonalRequestAttachmentRepository personalRequestAttachmentRepository;
 
     @PostMapping(consumes = {
             MediaType.APPLICATION_JSON_VALUE,
@@ -28,5 +37,15 @@ public class PersonalRequestController {
               @RequestPart(name = "attachments", required = false) List<MultipartFile> attachments) {
         log.info(personalRequest.toString());
         personalRequestApplicationService.save(personalRequest, attachments);
+    }
+
+    @GetMapping("{requestId}/attachments/{attachmentId}")
+    ResponseEntity<Resource> downloadAttachment(@PathVariable Long attachmentId) {
+        PersonalRequestAttachmentEntity attachment = personalRequestAttachmentRepository.findById(attachmentId)
+                .orElseThrow(() -> new RuntimeException("entity not found"));
+
+        InputStreamResource resource = new InputStreamResource(new ByteArrayInputStream(attachment.getFile()));
+
+        return ResponseEntity.ok(resource);
     }
 }

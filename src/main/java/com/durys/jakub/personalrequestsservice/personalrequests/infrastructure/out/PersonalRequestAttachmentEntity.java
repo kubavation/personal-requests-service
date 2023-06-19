@@ -8,7 +8,9 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.Type;
 import org.springframework.http.RequestEntity;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.util.Set;
 
 @Entity
@@ -35,9 +37,18 @@ public class PersonalRequestAttachmentEntity {
     @Enumerated(EnumType.STRING)
     private Status status;
 
-    public PersonalRequestAttachmentEntity(String fileName, byte[] file) {
-        this.fileName = fileName;
-        this.file = file;
+    public PersonalRequestAttachmentEntity(MultipartFile file) {
+        try {
+            this.file = file.getBytes();
+            this.fileName = file.getOriginalFilename();
+        } catch (IOException e) {
+            throw new RuntimeException("Error in creating attachment");
+        }
         this.status = Status.A;
+    }
+
+    public PersonalRequestAttachmentEntity withRequest(PersonalRequestEntity personalRequest) {
+        this.request = personalRequest;
+        return this;
     }
 }

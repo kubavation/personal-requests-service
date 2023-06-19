@@ -37,4 +37,25 @@ public class PersonalRequestFieldEntity {
 
     @Enumerated(EnumType.STRING)
     private Status status;
+
+    public PersonalRequestFieldEntity withDateValue(LocalDate value) {
+        this.dateValue = value;
+        return this;
+    }
+
+    public PersonalRequestFieldEntity withTextValue(String value) {
+        this.textValue = value;
+        return this;
+    }
+
+    public PersonalRequestFieldEntity withIntValue(Long value) {
+        this.intValue = value;
+        return this;
+    }
+
+    public PersonalRequestFieldEntity withRequest(PersonalRequestEntity personalRequest) {
+        this.request = personalRequest;
+        return this;
+    }
+
 }

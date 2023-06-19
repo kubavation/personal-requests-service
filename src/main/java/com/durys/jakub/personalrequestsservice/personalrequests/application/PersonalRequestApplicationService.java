@@ -49,13 +49,8 @@ public class PersonalRequestApplicationService {
        }
 
        return attachments.stream()
-                .map(attachment -> {
-                    try {
-                        return new PersonalRequestAttachmentEntity(attachment.getOriginalFilename(), attachment.getBytes());
-                    } catch (IOException e) {
-                        throw new RuntimeException("Error in creating attachment");
-                    }
-                }).collect(Collectors.toSet());
+                .map(PersonalRequestAttachmentEntity::new)
+                .collect(Collectors.toSet());
     }
 
 
