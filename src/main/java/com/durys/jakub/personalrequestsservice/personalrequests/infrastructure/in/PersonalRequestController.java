@@ -15,6 +15,7 @@ import java.util.List;
 @RestController
 @RequestMapping("/personal-requests")
 @RequiredArgsConstructor
+@CrossOrigin(origins = {"http://localhost:4200"})
 public class PersonalRequestController {
 
     private final PersonalRequestApplicationService personalRequestApplicationService;
@@ -26,5 +27,6 @@ public class PersonalRequestController {
     void save(@RequestPart("personalRequest") PersonalRequest personalRequest,
               @RequestPart(name = "attachments", required = false) List<MultipartFile> attachments) {
         log.info(personalRequest.toString());
+        personalRequestApplicationService.save(personalRequest, attachments);
     }
 }

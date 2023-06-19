@@ -2,17 +2,16 @@ package com.durys.jakub.personalrequestsservice.personalrequests.infrastructure.
 
 import com.durys.jakub.personalrequestsservice.shared.Status;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import java.util.Set;
+import java.util.stream.Collectors;
 
 @Entity
 @Table(name = "PR_PERSONAL_REQUEST")
 @NoArgsConstructor
-@Data
+@Getter
+@Setter
 @Builder
 @AllArgsConstructor
 public class PersonalRequestEntity {
@@ -35,4 +34,12 @@ public class PersonalRequestEntity {
 
     @OneToMany(mappedBy = "request", cascade = CascadeType.ALL)
     private Set<PersonalRequestAttachmentEntity> attachments;
+
+    public void withAttachments(Set<PersonalRequestAttachmentEntity> entities) {
+      this.attachments = entities.stream()
+                .map(attachment -> {
+                    attachment.setRequest(this);
+                    return attachment;
+                }).collect(Collectors.toSet());
+    }
 }
