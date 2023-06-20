@@ -2,6 +2,8 @@ package com.durys.jakub.personalrequestsservice.requestcirculationhistory.applic
 
 import com.durys.jakub.personalrequestsservice.events.handler.EventHandler;
 import com.durys.jakub.personalrequestsservice.personalrequests.domain.events.PersonalRequestCreatedEvent;
+import com.durys.jakub.personalrequestsservice.requestcirculationhistory.domain.PersonalRequestCirculationHistory;
+import com.durys.jakub.personalrequestsservice.requestcirculationhistory.infrastructure.PersonalRequestCirculationHistoryRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Component;
@@ -10,9 +12,18 @@ import org.springframework.stereotype.Component;
 @RequiredArgsConstructor
 public class PersonalRequestCreatedEventHandler implements EventHandler<PersonalRequestCreatedEvent> {
 
+    private final PersonalRequestCirculationHistoryRepository repository;
+
     @Override
     @EventListener
-    public void handle(PersonalRequestCreatedEvent personalRequestCreatedEvent) {
+    public void handle(PersonalRequestCreatedEvent event) {
 
+        PersonalRequestCirculationHistory requestHistory = PersonalRequestCirculationHistory.builder()
+                .requestId(event.requestId())
+                .tenantId(event.authorId())
+                .history("todo")
+                .build();
+
+        repository.save(requestHistory);
     }
 }
