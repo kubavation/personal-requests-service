@@ -1,4 +1,4 @@
-package com.durys.jakub.personalrequestsservice.personalrequests.infrastructure.out;
+package com.durys.jakub.personalrequestsservice.personalrequests.domain;
 
 import com.durys.jakub.personalrequestsservice.shared.Status;
 import jakarta.persistence.*;
@@ -6,12 +6,9 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.hibernate.annotations.Type;
-import org.springframework.http.RequestEntity;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
-import java.util.Set;
 
 @Entity
 @Table(name = "PR_PERSONAL_REQUEST_ATTACHMENT")
@@ -19,7 +16,7 @@ import java.util.Set;
 @Data
 @Builder
 @AllArgsConstructor
-public class PersonalRequestAttachmentEntity {
+public class PersonalRequestAttachment {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -27,7 +24,7 @@ public class PersonalRequestAttachmentEntity {
 
     @ManyToOne
     @JoinColumn(name = "request_id")
-    private PersonalRequestEntity request;
+    private PersonalRequest request;
 
     @Column(name = "FILE_NAME")
     private String fileName;
@@ -37,7 +34,7 @@ public class PersonalRequestAttachmentEntity {
     @Enumerated(EnumType.STRING)
     private Status status;
 
-    public PersonalRequestAttachmentEntity(MultipartFile file) {
+    public PersonalRequestAttachment(MultipartFile file) {
         try {
             this.file = file.getBytes();
             this.fileName = file.getOriginalFilename();
@@ -47,7 +44,7 @@ public class PersonalRequestAttachmentEntity {
         this.status = Status.A;
     }
 
-    public PersonalRequestAttachmentEntity withRequest(PersonalRequestEntity personalRequest) {
+    public PersonalRequestAttachment withRequest(PersonalRequest personalRequest) {
         this.request = personalRequest;
         return this;
     }

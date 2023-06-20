@@ -3,20 +3,18 @@ package com.durys.jakub.personalrequestsservice.personalrequests.infrastructure.
 import com.durys.jakub.personalrequestsservice.personalrequests.application.PersonalRequestApplicationService;
 import com.durys.jakub.personalrequestsservice.personalrequests.infrastructure.PersonalRequestAttachmentRepository;
 import com.durys.jakub.personalrequestsservice.personalrequests.infrastructure.model.PersonalRequest;
-import com.durys.jakub.personalrequestsservice.personalrequests.infrastructure.out.PersonalRequestAttachmentEntity;
-import com.google.common.io.ByteSource;
+import com.durys.jakub.personalrequestsservice.personalrequests.domain.PersonalRequestAttachment;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.core.io.InputStreamResource;
 import org.springframework.core.io.Resource;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.ByteArrayInputStream;
-import java.io.FileInputStream;
-import java.util.Arrays;
 import java.util.List;
 
 @Slf4j
@@ -41,11 +39,15 @@ public class PersonalRequestController {
 
     @GetMapping("{requestId}/attachments/{attachmentId}")
     ResponseEntity<Resource> downloadAttachment(@PathVariable Long attachmentId) {
-        PersonalRequestAttachmentEntity attachment = personalRequestAttachmentRepository.findById(attachmentId)
+
+        PersonalRequestAttachment attachment = personalRequestAttachmentRepository.findById(attachmentId)
                 .orElseThrow(() -> new RuntimeException("entity not found"));
 
-        InputStreamResource resource = new InputStreamResource(new ByteArrayInputStream(attachment.getFile()));
-
-        return ResponseEntity.ok(resource);
+        return ResponseEntity.ok()
+                .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + attachment.getFileName() + "\"")
+                .contentType(MediaType.APPLICATION_OCTET_STREAM)
+                .contentLength(attachment.getFile().length)
+                .body(new InputStreamResource(new ByteArrayInputStream(attachment.getFile())));
     }
 }
+

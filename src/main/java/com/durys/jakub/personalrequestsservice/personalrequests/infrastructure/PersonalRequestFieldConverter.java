@@ -1,6 +1,6 @@
 package com.durys.jakub.personalrequestsservice.personalrequests.infrastructure;
 
-import com.durys.jakub.personalrequestsservice.personalrequests.infrastructure.out.PersonalRequestFieldEntity;
+import com.durys.jakub.personalrequestsservice.personalrequests.domain.PersonalRequestField;
 import com.durys.jakub.personalrequestsservice.requestypes.domain.RequestTypeField;
 import com.durys.jakub.personalrequestsservice.shared.Status;
 import lombok.AccessLevel;
@@ -12,9 +12,9 @@ import java.util.Objects;
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class PersonalRequestFieldConverter {
 
-    public static PersonalRequestFieldEntity convert(RequestTypeField definition, Object value) {
+    public static PersonalRequestField convert(RequestTypeField definition, Object value) {
 
-        PersonalRequestFieldEntity entity = new PersonalRequestFieldEntity();
+        PersonalRequestField entity = new PersonalRequestField();
         entity.setRequestFieldTypeId(definition.getId());
         entity.setStatus(Status.A);
 
