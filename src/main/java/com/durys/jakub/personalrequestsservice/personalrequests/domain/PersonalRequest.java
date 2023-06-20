@@ -14,7 +14,7 @@ import java.util.stream.Collectors;
 @Setter
 @Builder
 @AllArgsConstructor
-public class PersonalRequestEntity {
+public class PersonalRequest {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -30,19 +30,19 @@ public class PersonalRequestEntity {
     private Status status;
 
     @OneToMany(mappedBy = "request", cascade = CascadeType.ALL)
-    private Set<PersonalRequestFieldEntity> fields;
+    private Set<PersonalRequestField> fields;
 
     @OneToMany(mappedBy = "request", cascade = CascadeType.ALL)
-    private Set<PersonalRequestAttachmentEntity> attachments;
+    private Set<PersonalRequestAttachment> attachments;
 
-    public PersonalRequestEntity withAttachments(Set<PersonalRequestAttachmentEntity> attachments) {
+    public PersonalRequest withAttachments(Set<PersonalRequestAttachment> attachments) {
       this.attachments = attachments.stream()
               .map(attachment -> attachment.withRequest(this))
               .collect(Collectors.toSet());
       return this;
     }
 
-    public PersonalRequestEntity withFields(Set<PersonalRequestFieldEntity> fields) {
+    public PersonalRequest withFields(Set<PersonalRequestField> fields) {
         this.fields = fields.stream()
                 .map(field -> field.withRequest(this))
                 .collect(Collectors.toSet());

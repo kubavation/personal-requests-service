@@ -3,7 +3,7 @@ package com.durys.jakub.personalrequestsservice.personalrequests.infrastructure.
 import com.durys.jakub.personalrequestsservice.personalrequests.application.PersonalRequestApplicationService;
 import com.durys.jakub.personalrequestsservice.personalrequests.infrastructure.PersonalRequestAttachmentRepository;
 import com.durys.jakub.personalrequestsservice.personalrequests.infrastructure.model.PersonalRequest;
-import com.durys.jakub.personalrequestsservice.personalrequests.domain.PersonalRequestAttachmentEntity;
+import com.durys.jakub.personalrequestsservice.personalrequests.domain.PersonalRequestAttachment;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.core.io.InputStreamResource;
@@ -40,7 +40,7 @@ public class PersonalRequestController {
     @GetMapping("{requestId}/attachments/{attachmentId}")
     ResponseEntity<Resource> downloadAttachment(@PathVariable Long attachmentId) {
 
-        PersonalRequestAttachmentEntity attachment = personalRequestAttachmentRepository.findById(attachmentId)
+        PersonalRequestAttachment attachment = personalRequestAttachmentRepository.findById(attachmentId)
                 .orElseThrow(() -> new RuntimeException("entity not found"));
 
         return ResponseEntity.ok()

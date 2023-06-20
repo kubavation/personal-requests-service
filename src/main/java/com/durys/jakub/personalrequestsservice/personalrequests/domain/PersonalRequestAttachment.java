@@ -16,7 +16,7 @@ import java.io.IOException;
 @Data
 @Builder
 @AllArgsConstructor
-public class PersonalRequestAttachmentEntity {
+public class PersonalRequestAttachment {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -24,7 +24,7 @@ public class PersonalRequestAttachmentEntity {
 
     @ManyToOne
     @JoinColumn(name = "request_id")
-    private PersonalRequestEntity request;
+    private PersonalRequest request;
 
     @Column(name = "FILE_NAME")
     private String fileName;
@@ -34,7 +34,7 @@ public class PersonalRequestAttachmentEntity {
     @Enumerated(EnumType.STRING)
     private Status status;
 
-    public PersonalRequestAttachmentEntity(MultipartFile file) {
+    public PersonalRequestAttachment(MultipartFile file) {
         try {
             this.file = file.getBytes();
             this.fileName = file.getOriginalFilename();
@@ -44,7 +44,7 @@ public class PersonalRequestAttachmentEntity {
         this.status = Status.A;
     }
 
-    public PersonalRequestAttachmentEntity withRequest(PersonalRequestEntity personalRequest) {
+    public PersonalRequestAttachment withRequest(PersonalRequest personalRequest) {
         this.request = personalRequest;
         return this;
     }

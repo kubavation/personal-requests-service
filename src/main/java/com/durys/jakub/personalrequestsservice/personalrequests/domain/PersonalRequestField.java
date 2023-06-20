@@ -11,7 +11,7 @@ import java.time.LocalDate;
 @Table(name = "PR_PERSONAL_REQUEST_FIELD")
 @NoArgsConstructor
 @Data
-public class PersonalRequestFieldEntity {
+public class PersonalRequestField {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -19,7 +19,7 @@ public class PersonalRequestFieldEntity {
 
     @ManyToOne
     @JoinColumn(name = "request_id")
-    private PersonalRequestEntity request;
+    private PersonalRequest request;
 
     @Column(name = "request_field_type_id")
     private Long requestFieldTypeId;
@@ -38,22 +38,22 @@ public class PersonalRequestFieldEntity {
     @Enumerated(EnumType.STRING)
     private Status status;
 
-    public PersonalRequestFieldEntity withDateValue(LocalDate value) {
+    public PersonalRequestField withDateValue(LocalDate value) {
         this.dateValue = value;
         return this;
     }
 
-    public PersonalRequestFieldEntity withTextValue(String value) {
+    public PersonalRequestField withTextValue(String value) {
         this.textValue = value;
         return this;
     }
 
-    public PersonalRequestFieldEntity withIntValue(Long value) {
+    public PersonalRequestField withIntValue(Long value) {
         this.intValue = value;
         return this;
     }
 
-    public PersonalRequestFieldEntity withRequest(PersonalRequestEntity personalRequest) {
+    public PersonalRequestField withRequest(PersonalRequest personalRequest) {
         this.request = personalRequest;
         return this;
     }
