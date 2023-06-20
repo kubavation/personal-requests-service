@@ -1,6 +1,9 @@
 package com.durys.jakub.personalrequestsservice.personalrequests.application;
 
 import com.durys.jakub.personalrequestsservice.context.ContextProvider;
+import com.durys.jakub.personalrequestsservice.events.DomainEvent;
+import com.durys.jakub.personalrequestsservice.events.DomainEventPublisher;
+import com.durys.jakub.personalrequestsservice.personalrequests.domain.events.PersonalRequestCreatedEvent;
 import com.durys.jakub.personalrequestsservice.personalrequests.infrastructure.PersonalRequestFieldConverter;
 import com.durys.jakub.personalrequestsservice.personalrequests.infrastructure.PersonalRequestRepository;
 import com.durys.jakub.personalrequestsservice.personalrequests.infrastructure.model.PersonalRequest;
@@ -31,6 +34,7 @@ public class PersonalRequestApplicationService {
     private final ContextProvider contextProvider;
     private final RequestTypeRepository requestTypeRepository;
     private final PersonalRequestRepository personalRequestRepository;
+    private final DomainEventPublisher eventPublisher;
 
     @Transactional
     public void save(PersonalRequest personalRequest, List<MultipartFile> attachments) {
@@ -39,7 +43,9 @@ public class PersonalRequestApplicationService {
                 .withFields(fieldsFrom(personalRequest))
                 .withAttachments(buildAttachments(attachments));
 
-        personalRequestRepository.save(entity);
+        PersonalRequestEntity saved = personalRequestRepository.save(entity);
+
+        eventPublisher.publish(new PersonalRequestCreatedEvent(saved.getId(), saved.getTenantId()));
     }
 
     private Set<PersonalRequestAttachmentEntity> buildAttachments(List<MultipartFile> attachments) {
