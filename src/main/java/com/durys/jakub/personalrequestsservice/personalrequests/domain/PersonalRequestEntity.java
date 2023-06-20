@@ -1,4 +1,4 @@
-package com.durys.jakub.personalrequestsservice.personalrequests.infrastructure.out;
+package com.durys.jakub.personalrequestsservice.personalrequests.domain;
 
 import com.durys.jakub.personalrequestsservice.shared.Status;
 import jakarta.persistence.*;

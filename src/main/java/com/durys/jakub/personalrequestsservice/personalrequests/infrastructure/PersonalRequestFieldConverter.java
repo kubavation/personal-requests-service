@@ -1,6 +1,6 @@
 package com.durys.jakub.personalrequestsservice.personalrequests.infrastructure;
 
-import com.durys.jakub.personalrequestsservice.personalrequests.infrastructure.out.PersonalRequestFieldEntity;
+import com.durys.jakub.personalrequestsservice.personalrequests.domain.PersonalRequestFieldEntity;
 import com.durys.jakub.personalrequestsservice.requestypes.domain.RequestTypeField;
 import com.durys.jakub.personalrequestsservice.shared.Status;
 import lombok.AccessLevel;

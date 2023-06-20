@@ -3,7 +3,7 @@ package com.durys.jakub.personalrequestsservice.personalrequests.infrastructure.
 import com.durys.jakub.personalrequestsservice.personalrequests.application.PersonalRequestApplicationService;
 import com.durys.jakub.personalrequestsservice.personalrequests.infrastructure.PersonalRequestAttachmentRepository;
 import com.durys.jakub.personalrequestsservice.personalrequests.infrastructure.model.PersonalRequest;
-import com.durys.jakub.personalrequestsservice.personalrequests.infrastructure.out.PersonalRequestAttachmentEntity;
+import com.durys.jakub.personalrequestsservice.personalrequests.domain.PersonalRequestAttachmentEntity;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.core.io.InputStreamResource;

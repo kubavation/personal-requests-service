@@ -1,15 +1,14 @@
 package com.durys.jakub.personalrequestsservice.personalrequests.application;
 
 import com.durys.jakub.personalrequestsservice.context.ContextProvider;
-import com.durys.jakub.personalrequestsservice.events.DomainEvent;
 import com.durys.jakub.personalrequestsservice.events.DomainEventPublisher;
 import com.durys.jakub.personalrequestsservice.personalrequests.domain.events.PersonalRequestCreatedEvent;
 import com.durys.jakub.personalrequestsservice.personalrequests.infrastructure.PersonalRequestFieldConverter;
 import com.durys.jakub.personalrequestsservice.personalrequests.infrastructure.PersonalRequestRepository;
 import com.durys.jakub.personalrequestsservice.personalrequests.infrastructure.model.PersonalRequest;
-import com.durys.jakub.personalrequestsservice.personalrequests.infrastructure.out.PersonalRequestAttachmentEntity;
-import com.durys.jakub.personalrequestsservice.personalrequests.infrastructure.out.PersonalRequestEntity;
-import com.durys.jakub.personalrequestsservice.personalrequests.infrastructure.out.PersonalRequestFieldEntity;
+import com.durys.jakub.personalrequestsservice.personalrequests.domain.PersonalRequestAttachmentEntity;
+import com.durys.jakub.personalrequestsservice.personalrequests.domain.PersonalRequestEntity;
+import com.durys.jakub.personalrequestsservice.personalrequests.domain.PersonalRequestFieldEntity;
 import com.durys.jakub.personalrequestsservice.requestypes.domain.RequestTypeField;
 import com.durys.jakub.personalrequestsservice.requestypes.infrastructure.RequestTypeRepository;
 import com.durys.jakub.personalrequestsservice.shared.Status;
@@ -19,7 +18,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.io.IOException;
 import java.util.Collections;
 import java.util.List;
 import java.util.Objects;

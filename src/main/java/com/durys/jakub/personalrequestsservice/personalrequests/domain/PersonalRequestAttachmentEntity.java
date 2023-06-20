@@ -1,4 +1,4 @@
-package com.durys.jakub.personalrequestsservice.personalrequests.infrastructure.out;
+package com.durys.jakub.personalrequestsservice.personalrequests.domain;
 
 import com.durys.jakub.personalrequestsservice.shared.Status;
 import jakarta.persistence.*;
@@ -6,12 +6,9 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.hibernate.annotations.Type;
-import org.springframework.http.RequestEntity;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
-import java.util.Set;
 
 @Entity
 @Table(name = "PR_PERSONAL_REQUEST_ATTACHMENT")
