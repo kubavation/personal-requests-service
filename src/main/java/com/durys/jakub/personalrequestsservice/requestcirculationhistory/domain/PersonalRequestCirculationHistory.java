@@ -20,4 +20,10 @@ public class PersonalRequestCirculationHistory {
 
     private String history;
 
+
+    public PersonalRequestCirculationHistory withHistory(String history) {
+        this.history = history;
+        return this;
+    }
+
 }

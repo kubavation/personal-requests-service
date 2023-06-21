@@ -18,7 +18,7 @@ public class SupervisorAcceptationHistory {
     private Long id;
 
     @Column(name = "SUPERVISOR_ID")
-    private Long supervisorId;
+    private String supervisorId;
 
     @Column(name = "REQUEST_ID")
     private Long requestId;
@@ -27,4 +27,8 @@ public class SupervisorAcceptationHistory {
     private String requestHistory;
 
 
+    public SupervisorAcceptationHistory withHistory(String history) {
+        this.requestHistory = history;
+        return this;
+    }
 }
