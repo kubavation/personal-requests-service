@@ -3,6 +3,7 @@ package com.durys.jakub.personalrequestsservice.requestcirculationhistory.applic
 import com.durys.jakub.personalrequestsservice.events.handler.EventHandler;
 import com.durys.jakub.personalrequestsservice.personalrequests.domain.events.PersonalRequestStatusChangedEvent;
 import com.durys.jakub.personalrequestsservice.requestcirculationhistory.domain.PersonalRequestCirculationHistory;
+import com.durys.jakub.personalrequestsservice.requestcirculationhistory.domain.PersonalRequestHistoryBuilder;
 import com.durys.jakub.personalrequestsservice.requestcirculationhistory.domain.SupervisorAcceptationHistory;
 import com.durys.jakub.personalrequestsservice.requestcirculationhistory.infrastructure.PersonalRequestCirculationHistoryRepository;
 import com.durys.jakub.personalrequestsservice.requestcirculationhistory.infrastructure.SupervisorAcceptationHistoryRepository;
@@ -24,7 +25,7 @@ public class PersonalRequestStatusChangedEventHandler implements EventHandler<Pe
         PersonalRequestCirculationHistory history = personalRequestCirculationHistoryRepository.findById(event.requestId())
                 .orElseThrow(() -> new RuntimeException("todo"));
 
-        history.setHistory("todo append");
+        history.setHistory(PersonalRequestHistoryBuilder.buildFrom(event));
 
         PersonalRequestCirculationHistory saved = personalRequestCirculationHistoryRepository.save(history);
 
