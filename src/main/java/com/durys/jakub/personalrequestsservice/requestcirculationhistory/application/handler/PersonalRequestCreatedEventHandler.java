@@ -7,6 +7,7 @@ import com.durys.jakub.personalrequestsservice.requestcirculationhistory.domain.
 import com.durys.jakub.personalrequestsservice.requestcirculationhistory.infrastructure.PersonalRequestCirculationHistoryRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.event.EventListener;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Component;
 
 @Component
@@ -17,6 +18,7 @@ public class PersonalRequestCreatedEventHandler implements EventHandler<Personal
 
     @Override
     @EventListener
+    @Async
     public void handle(PersonalRequestCreatedEvent event) {
 
         PersonalRequestCirculationHistory requestHistory = PersonalRequestCirculationHistory.builder()
