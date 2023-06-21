@@ -27,4 +27,8 @@ public class SupervisorAcceptationHistory {
     private String requestHistory;
 
 
+    public SupervisorAcceptationHistory withHistory(String history) {
+        this.requestHistory = history;
+        return this;
+    }
 }

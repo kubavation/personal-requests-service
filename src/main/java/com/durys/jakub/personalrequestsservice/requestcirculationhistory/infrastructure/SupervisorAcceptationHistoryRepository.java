@@ -10,7 +10,7 @@ import java.util.Optional;
 public interface SupervisorAcceptationHistoryRepository extends JpaRepository<SupervisorAcceptationHistory, Long> {
 
     @Query("from SupervisorAcceptationHistory h where h.requestId = :requestId and h.supervisorId = :supervisorId")
-    Optional<SupervisorAcceptationHistory> findBySupervisorAndRequest(String supervisorId, String requestId);
+    Optional<SupervisorAcceptationHistory> findBySupervisorAndRequest(String supervisorId, Long requestId);
 
     List<SupervisorAcceptationHistory> findByRequestId(Long requestId);
 }
