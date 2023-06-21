@@ -1,8 +1,7 @@
 package com.durys.jakub.personalrequestsservice.requestcirculationhistory.application.handler;
 
 import com.durys.jakub.personalrequestsservice.events.handler.EventHandler;
-import com.durys.jakub.personalrequestsservice.personalrequests.domain.events.PersonalRequestCreatedEvent;
-import com.durys.jakub.personalrequestsservice.personalrequests.domain.events.PersonalRequestSentForAcceptationEvent;
+import com.durys.jakub.personalrequestsservice.personalrequests.domain.events.PersonalRequestStatusChangedEvent;
 import com.durys.jakub.personalrequestsservice.requestcirculationhistory.domain.PersonalRequestCirculationHistory;
 import com.durys.jakub.personalrequestsservice.requestcirculationhistory.domain.SupervisorAcceptationHistory;
 import com.durys.jakub.personalrequestsservice.requestcirculationhistory.infrastructure.PersonalRequestCirculationHistoryRepository;
@@ -11,18 +10,16 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Component;
 
-import java.util.Optional;
-
 @Component
 @RequiredArgsConstructor
-public class PersonalRequestSentForAcceptationEventHandler implements EventHandler<PersonalRequestSentForAcceptationEvent> {
+public class PersonalRequestStatusChangedEventHandler implements EventHandler<PersonalRequestStatusChangedEvent> {
 
     private final PersonalRequestCirculationHistoryRepository personalRequestCirculationHistoryRepository;
     private final SupervisorAcceptationHistoryRepository supervisorAcceptationHistoryRepository;
 
     @Override
     @EventListener
-    public void handle(PersonalRequestSentForAcceptationEvent event) {
+    public void handle(PersonalRequestStatusChangedEvent event) {
 
         PersonalRequestCirculationHistory history = personalRequestCirculationHistoryRepository.findById(event.requestId())
                 .orElseThrow(() -> new RuntimeException("todo"));
