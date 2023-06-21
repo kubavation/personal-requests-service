@@ -23,15 +23,14 @@ public class PersonalRequestStatusChangedEventHandler implements EventHandler<Pe
     public void handle(PersonalRequestStatusChangedEvent event) {
 
         PersonalRequestCirculationHistory history = personalRequestCirculationHistoryRepository.findById(event.requestId())
+                .map(requestHistory -> requestHistory.withHistory(PersonalRequestHistoryBuilder.buildFrom(event)))
+                .map(personalRequestCirculationHistoryRepository::save)
                 .orElseThrow(() -> new RuntimeException("todo"));
 
-        history.setHistory(PersonalRequestHistoryBuilder.buildFrom(event));
-
-        PersonalRequestCirculationHistory saved = personalRequestCirculationHistoryRepository.save(history);
 
         supervisorAcceptationHistoryRepository.findByRequestId(event.requestId())
                 .stream()
-                .map(supervisorAcceptationHistory -> supervisorAcceptationHistory.withHistory(saved.getHistory()))
+                .map(supervisorAcceptationHistory -> supervisorAcceptationHistory.withHistory(history.getHistory()))
                 .forEach(supervisorAcceptationHistoryRepository::save);
 
 
@@ -41,7 +40,7 @@ public class PersonalRequestStatusChangedEventHandler implements EventHandler<Pe
             SupervisorAcceptationHistory supervisorHistory = SupervisorAcceptationHistory.builder()
                     .requestId(event.requestId())
                     .supervisorId(event.supervisorId())
-                    .requestHistory(saved.getHistory())
+                    .requestHistory(history.getHistory())
                     .build();
 
             supervisorAcceptationHistoryRepository.save(supervisorHistory);
