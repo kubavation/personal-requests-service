@@ -19,18 +19,18 @@ public class PersonalRequestHistoryBuilder {
     }
 
     private static String handleNewRequest(PersonalRequestCreatedEvent event) {
-        return "";
+        return "%s - %s created new new request".formatted(event.status().name(), event.authorId());
     }
 
     private static String handleSentForAcceptationRequest(PersonalRequestStatusChangedEvent event) {
-        return "";
+        return "%s - request sent for acceptation to %s".formatted(event.status().name(), event.supervisorId());
     }
 
     private static String handleRejectedRequest(PersonalRequestStatusChangedEvent event) {
-        return "";
+        return "%s - request rejected by %s".formatted(event.status().name(), event.supervisorId());
     }
 
     private static String handleConfirmedRequest(PersonalRequestStatusChangedEvent event) {
-        return "";
+        return "%s - request confirmed by %s".formatted(event.status().name(), event.supervisorId());
     }
 }
