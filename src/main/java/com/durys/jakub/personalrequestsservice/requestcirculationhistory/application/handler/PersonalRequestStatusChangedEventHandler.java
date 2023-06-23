@@ -38,9 +38,7 @@ public class PersonalRequestStatusChangedEventHandler implements EventHandler<Pe
                 .forEach(supervisorAcceptationHistoryRepository::save);
 
 
-        if (supervisorAcceptationHistoryRepository
-                .findBySupervisorAndRequest(event.supervisorId(), event.requestId()).isEmpty()) {
-
+        if (supervisorHistoryNotExists(event)) {
             supervisorAcceptationHistoryRepository.save(instanceOf(event, history));
         }
 
@@ -53,6 +51,11 @@ public class PersonalRequestStatusChangedEventHandler implements EventHandler<Pe
                 .supervisorId(event.supervisorId())
                 .requestHistory(requestHistory.getHistory())
                 .build();
+    }
+
+    private boolean supervisorHistoryNotExists(PersonalRequestStatusChangedEvent event) {
+        return supervisorAcceptationHistoryRepository
+                .findBySupervisorAndRequest(event.supervisorId(), event.requestId()).isEmpty()
     }
 
 }
