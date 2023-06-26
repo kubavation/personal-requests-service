@@ -8,6 +8,7 @@ import com.durys.jakub.personalrequestsservice.personalrequests.infrastructure.P
 import com.durys.jakub.personalrequestsservice.personalrequests.domain.PersonalRequestAttachment;
 import com.durys.jakub.personalrequestsservice.personalrequests.domain.PersonalRequest;
 import com.durys.jakub.personalrequestsservice.personalrequests.domain.PersonalRequestField;
+import com.durys.jakub.personalrequestsservice.personalrequests.infrastructure.model.PersonalRequestDTO;
 import com.durys.jakub.personalrequestsservice.requestypes.domain.RequestTypeField;
 import com.durys.jakub.personalrequestsservice.requestypes.infrastructure.RequestTypeRepository;
 import com.durys.jakub.personalrequestsservice.shared.Status;
@@ -34,10 +35,10 @@ public class PersonalRequestApplicationService {
     private final DomainEventPublisher eventPublisher;
 
     @Transactional
-    public void save(com.durys.jakub.personalrequestsservice.personalrequests.infrastructure.model.PersonalRequest personalRequest, List<MultipartFile> attachments) {
+    public void save(PersonalRequestDTO personalRequestDTO, List<MultipartFile> attachments) {
 
-        PersonalRequest entity = toEntity(personalRequest)
-                .withFields(fieldsFrom(personalRequest))
+        PersonalRequest entity = toEntity(personalRequestDTO)
+                .withFields(fieldsFrom(personalRequestDTO))
                 .withAttachments(buildAttachments(attachments));
 
         PersonalRequest saved = personalRequestRepository.save(entity);
@@ -57,26 +58,26 @@ public class PersonalRequestApplicationService {
     }
 
 
-    private PersonalRequest toEntity(com.durys.jakub.personalrequestsservice.personalrequests.infrastructure.model.PersonalRequest personalRequest) {
+    private PersonalRequest toEntity(PersonalRequestDTO personalRequestDTO) {
         return PersonalRequest.builder()
-                .requestTypeId(personalRequest.getTypeId())
-                .tenantId(personalRequest.getTenantId())
+                .requestTypeId(personalRequestDTO.getTypeId())
+                .tenantId(personalRequestDTO.getTenantId())
                 .status(Status.A)
                 .build();
     }
 
-    private Set<PersonalRequestField> fieldsFrom(com.durys.jakub.personalrequestsservice.personalrequests.infrastructure.model.PersonalRequest personalRequest) {
+    private Set<PersonalRequestField> fieldsFrom(PersonalRequestDTO personalRequestDTO) {
 
-        Set<RequestTypeField> fieldDefinitions = requestTypeRepository.fields(personalRequest.getTypeId());
+        Set<RequestTypeField> fieldDefinitions = requestTypeRepository.fields(personalRequestDTO.getTypeId());
 
-        if (fieldDefinitions.size() != personalRequest.getFields().size()) {
+        if (fieldDefinitions.size() != personalRequestDTO.getFields().size()) {
             throw new RuntimeException("invalid field size");
         }
 
         return fieldDefinitions
                 .stream()
                 .map(definition -> PersonalRequestFieldConverter
-                        .convert(definition, personalRequest.fieldValue(definition.getName())))
+                        .convert(definition, personalRequestDTO.fieldValue(definition.getName())))
                 .collect(Collectors.toSet());
     }
 

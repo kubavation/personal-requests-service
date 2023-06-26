@@ -2,7 +2,7 @@ package com.durys.jakub.personalrequestsservice.personalrequests.infrastructure.
 
 import com.durys.jakub.personalrequestsservice.personalrequests.application.PersonalRequestApplicationService;
 import com.durys.jakub.personalrequestsservice.personalrequests.infrastructure.PersonalRequestAttachmentRepository;
-import com.durys.jakub.personalrequestsservice.personalrequests.infrastructure.model.PersonalRequest;
+import com.durys.jakub.personalrequestsservice.personalrequests.infrastructure.model.PersonalRequestDTO;
 import com.durys.jakub.personalrequestsservice.personalrequests.domain.PersonalRequestAttachment;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -31,10 +31,10 @@ public class PersonalRequestController {
             MediaType.APPLICATION_JSON_VALUE,
             MediaType.MULTIPART_FORM_DATA_VALUE
     })
-    void save(@RequestPart("personalRequest") PersonalRequest personalRequest,
+    void save(@RequestPart("personalRequest") PersonalRequestDTO personalRequestDTO,
               @RequestPart(name = "attachments", required = false) List<MultipartFile> attachments) {
-        log.info(personalRequest.toString());
-        personalRequestApplicationService.save(personalRequest, attachments);
+        log.info(personalRequestDTO.toString());
+        personalRequestApplicationService.save(personalRequestDTO, attachments);
     }
 
     @GetMapping("{requestId}/attachments/{attachmentId}")
