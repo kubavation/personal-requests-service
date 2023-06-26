@@ -16,6 +16,7 @@ public class PersonalRequestCirculationHistory {
     @Column(name = "REQUEST_ID")
     private Long requestId;
 
+    @Column(name = "TENANT_ID")
     private String tenantId;
 
     private String history;
