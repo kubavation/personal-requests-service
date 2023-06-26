@@ -13,4 +13,5 @@
     <include file="requests/create-personal-request-fields-table.xml"  relativeToChangelogFile="true" />
     <include file="requests/create-personal-request-attachment-table.xml"  relativeToChangelogFile="true" />
     <include file="history/create-personal-request-history-table.xml"  relativeToChangelogFile="true" />
+    <include file="history/create-supervisor-acceptation-history-table.xml"  relativeToChangelogFile="true" />
 </databaseChangeLog>
