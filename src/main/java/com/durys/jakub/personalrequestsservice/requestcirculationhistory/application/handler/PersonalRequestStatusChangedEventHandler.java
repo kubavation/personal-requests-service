@@ -55,7 +55,7 @@ public class PersonalRequestStatusChangedEventHandler implements EventHandler<Pe
 
     private boolean supervisorHistoryNotExists(PersonalRequestStatusChangedEvent event) {
         return supervisorAcceptationHistoryRepository
-                .findBySupervisorAndRequest(event.supervisorId(), event.requestId()).isEmpty()
+                .findBySupervisorAndRequest(event.supervisorId(), event.requestId()).isEmpty();
     }
 
 }
