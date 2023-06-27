@@ -2,16 +2,15 @@ package com.durys.jakub.personalrequestsservice.personalrequests.application;
 
 import com.durys.jakub.personalrequestsservice.context.ContextProvider;
 import com.durys.jakub.personalrequestsservice.events.DomainEventPublisher;
+import com.durys.jakub.personalrequestsservice.personalrequests.domain.PersonalRequest;
+import com.durys.jakub.personalrequestsservice.personalrequests.domain.PersonalRequestAttachment;
+import com.durys.jakub.personalrequestsservice.personalrequests.domain.PersonalRequestField;
 import com.durys.jakub.personalrequestsservice.personalrequests.domain.events.PersonalRequestCreatedEvent;
 import com.durys.jakub.personalrequestsservice.personalrequests.infrastructure.PersonalRequestFieldConverter;
 import com.durys.jakub.personalrequestsservice.personalrequests.infrastructure.PersonalRequestRepository;
-import com.durys.jakub.personalrequestsservice.personalrequests.domain.PersonalRequestAttachment;
-import com.durys.jakub.personalrequestsservice.personalrequests.domain.PersonalRequest;
-import com.durys.jakub.personalrequestsservice.personalrequests.domain.PersonalRequestField;
 import com.durys.jakub.personalrequestsservice.personalrequests.infrastructure.model.PersonalRequestDTO;
 import com.durys.jakub.personalrequestsservice.requestypes.domain.RequestTypeField;
 import com.durys.jakub.personalrequestsservice.requestypes.infrastructure.RequestTypeRepository;
-import com.durys.jakub.personalrequestsservice.shared.Status;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -37,7 +36,7 @@ public class PersonalRequestApplicationService {
     @Transactional
     public void save(PersonalRequestDTO personalRequestDTO, List<MultipartFile> attachments) {
 
-        PersonalRequest entity = toEntity(personalRequestDTO)
+        PersonalRequest entity = PersonalRequestConverter.toEntity(personalRequestDTO)
                 .withFields(fieldsFrom(personalRequestDTO))
                 .withAttachments(buildAttachments(attachments));
 
@@ -55,15 +54,6 @@ public class PersonalRequestApplicationService {
        return attachments.stream()
                 .map(PersonalRequestAttachment::new)
                 .collect(Collectors.toSet());
-    }
-
-
-    private PersonalRequest toEntity(PersonalRequestDTO personalRequestDTO) {
-        return PersonalRequest.builder()
-                .requestTypeId(personalRequestDTO.getTypeId())
-                .tenantId(personalRequestDTO.getTenantId())
-                .status(Status.A)
-                .build();
     }
 
     private Set<PersonalRequestField> fieldsFrom(PersonalRequestDTO personalRequestDTO) {
