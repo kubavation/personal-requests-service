@@ -62,4 +62,9 @@ public class PersonalRequest {
         return this;
     }
 
+    public PersonalRequest confirm() {
+        this.status = PersonalRequestStatus.CONFIRMED;
+        return this;
+    }
+
 }

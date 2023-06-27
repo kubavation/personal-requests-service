@@ -59,6 +59,18 @@ public class PersonalRequestApplicationService {
                         new PersonalRequestStatusChangedEvent(request.getId(), supervisorId, request.getStatus())));
     }
 
+    public void confirm(Set<Long> requestsId) {
+
+        List<PersonalRequest> requests = personalRequestRepository.findAllById(requestsId)
+                .stream()
+                .map(PersonalRequest::confirm)
+                .toList();
+
+        personalRequestRepository.saveAll(requests)
+                .forEach(request -> eventPublisher.publish(
+                        new PersonalRequestStatusChangedEvent(request.getId(), request.getSupervisorId(), request.getStatus())));
+    }
+
 
     private Set<PersonalRequestField> fieldsFrom(PersonalRequestDTO personalRequestDTO) {
 
