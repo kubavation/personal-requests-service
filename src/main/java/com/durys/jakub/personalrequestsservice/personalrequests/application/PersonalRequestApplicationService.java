@@ -72,7 +72,7 @@ public class PersonalRequestApplicationService {
 
     private void emitPersonalRequestStatusChangedEvent(PersonalRequest request) {
         eventPublisher.publish(
-                new PersonalRequestStatusChangedEvent(request.getId(), request.getSupervisorId(), request.getStatus()))
+                new PersonalRequestStatusChangedEvent(request.getId(), request.getSupervisorId(), request.getStatus()));
     }
 
 
