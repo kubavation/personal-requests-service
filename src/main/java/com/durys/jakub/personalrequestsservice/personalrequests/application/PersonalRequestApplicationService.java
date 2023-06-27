@@ -5,6 +5,7 @@ import com.durys.jakub.personalrequestsservice.events.DomainEventPublisher;
 import com.durys.jakub.personalrequestsservice.personalrequests.domain.PersonalRequest;
 import com.durys.jakub.personalrequestsservice.personalrequests.domain.PersonalRequestField;
 import com.durys.jakub.personalrequestsservice.personalrequests.domain.events.PersonalRequestCreatedEvent;
+import com.durys.jakub.personalrequestsservice.personalrequests.domain.events.PersonalRequestStatusChangedEvent;
 import com.durys.jakub.personalrequestsservice.personalrequests.infrastructure.PersonalRequestFieldConverter;
 import com.durys.jakub.personalrequestsservice.personalrequests.infrastructure.PersonalRequestRepository;
 import com.durys.jakub.personalrequestsservice.personalrequests.infrastructure.model.PersonalRequestDTO;
@@ -44,6 +45,18 @@ public class PersonalRequestApplicationService {
 
         eventPublisher
                 .publish(new PersonalRequestCreatedEvent(saved.getId(), saved.getTenantId()));
+    }
+
+    public void sendTo(Set<Long> requestsId, String supervisorId) {
+
+        List<PersonalRequest> requests = personalRequestRepository.findAllById(requestsId)
+                .stream()
+                .map(request -> request.sendTo(supervisorId))
+                .toList();
+
+        personalRequestRepository.saveAll(requests)
+                .forEach(request -> eventPublisher.publish(
+                        new PersonalRequestStatusChangedEvent(request.getId(), supervisorId, request.getStatus())));
     }
 
 
