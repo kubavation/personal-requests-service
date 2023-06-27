@@ -26,6 +26,9 @@ public class PersonalRequest {
     @Column(name = "tenant_id")
     private String tenantId;
 
+    @Column(name = "supervisor_id")
+    private String supervisorId;
+
     @Enumerated(EnumType.STRING)
     private Status status;
 
