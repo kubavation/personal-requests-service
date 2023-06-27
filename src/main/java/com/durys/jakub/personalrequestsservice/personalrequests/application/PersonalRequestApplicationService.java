@@ -55,8 +55,7 @@ public class PersonalRequestApplicationService {
                 .toList();
 
         personalRequestRepository.saveAll(requests)
-                .forEach(request -> eventPublisher.publish(
-                        new PersonalRequestStatusChangedEvent(request.getId(), supervisorId, request.getStatus())));
+                .forEach(this::emitPersonalRequestStatusChangedEvent);
     }
 
     public void confirm(Set<Long> requestsId) {
@@ -67,8 +66,13 @@ public class PersonalRequestApplicationService {
                 .toList();
 
         personalRequestRepository.saveAll(requests)
-                .forEach(request -> eventPublisher.publish(
-                        new PersonalRequestStatusChangedEvent(request.getId(), request.getSupervisorId(), request.getStatus())));
+                .forEach(this::emitPersonalRequestStatusChangedEvent);
+    }
+
+
+    private void emitPersonalRequestStatusChangedEvent(PersonalRequest request) {
+        eventPublisher.publish(
+                new PersonalRequestStatusChangedEvent(request.getId(), request.getSupervisorId(), request.getStatus()))
     }
 
 
