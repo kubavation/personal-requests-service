@@ -3,7 +3,6 @@ package com.durys.jakub.personalrequestsservice.personalrequests.application;
 import com.durys.jakub.personalrequestsservice.context.ContextProvider;
 import com.durys.jakub.personalrequestsservice.events.DomainEventPublisher;
 import com.durys.jakub.personalrequestsservice.personalrequests.domain.PersonalRequest;
-import com.durys.jakub.personalrequestsservice.personalrequests.domain.PersonalRequestAttachment;
 import com.durys.jakub.personalrequestsservice.personalrequests.domain.PersonalRequestField;
 import com.durys.jakub.personalrequestsservice.personalrequests.domain.events.PersonalRequestCreatedEvent;
 import com.durys.jakub.personalrequestsservice.personalrequests.infrastructure.PersonalRequestFieldConverter;
@@ -17,11 +16,12 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.util.Collections;
 import java.util.List;
-import java.util.Objects;
 import java.util.Set;
 import java.util.stream.Collectors;
+
+import static com.durys.jakub.personalrequestsservice.personalrequests.application.PersonalRequestConverter.buildAttachments;
+import static com.durys.jakub.personalrequestsservice.personalrequests.application.PersonalRequestConverter.toEntity;
 
 @Component
 @RequiredArgsConstructor
@@ -36,25 +36,16 @@ public class PersonalRequestApplicationService {
     @Transactional
     public void save(PersonalRequestDTO personalRequestDTO, List<MultipartFile> attachments) {
 
-        PersonalRequest entity = PersonalRequestConverter.toEntity(personalRequestDTO)
+        PersonalRequest entity = toEntity(personalRequestDTO)
                 .withFields(fieldsFrom(personalRequestDTO))
                 .withAttachments(buildAttachments(attachments));
 
         PersonalRequest saved = personalRequestRepository.save(entity);
 
-        eventPublisher.publish(new PersonalRequestCreatedEvent(saved.getId(), saved.getTenantId()));
+        eventPublisher
+                .publish(new PersonalRequestCreatedEvent(saved.getId(), saved.getTenantId()));
     }
 
-    private Set<PersonalRequestAttachment> buildAttachments(List<MultipartFile> attachments) {
-
-       if (Objects.isNull(attachments)) {
-           return Collections.emptySet();
-       }
-
-       return attachments.stream()
-                .map(PersonalRequestAttachment::new)
-                .collect(Collectors.toSet());
-    }
 
     private Set<PersonalRequestField> fieldsFrom(PersonalRequestDTO personalRequestDTO) {
 
