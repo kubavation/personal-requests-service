@@ -1,6 +1,5 @@
 package com.durys.jakub.personalrequestsservice.personalrequests.domain;
 
-import com.durys.jakub.personalrequestsservice.shared.Status;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -26,8 +25,11 @@ public class PersonalRequest {
     @Column(name = "tenant_id")
     private String tenantId;
 
+    @Column(name = "supervisor_id")
+    private String supervisorId;
+
     @Enumerated(EnumType.STRING)
-    private Status status;
+    private PersonalRequestStatus status;
 
     @OneToMany(mappedBy = "request", cascade = CascadeType.ALL)
     private Set<PersonalRequestField> fields;
@@ -46,6 +48,22 @@ public class PersonalRequest {
         this.fields = fields.stream()
                 .map(field -> field.withRequest(this))
                 .collect(Collectors.toSet());
+        return this;
+    }
+
+    public PersonalRequest withSupervisor(String supervisorId) {
+        this.supervisorId = supervisorId;
+        return this;
+    }
+
+    public PersonalRequest sendTo(String supervisorId) {
+        this.supervisorId = supervisorId;
+        this.status = PersonalRequestStatus.SENT_FOR_ACCEPTATION;
+        return this;
+    }
+
+    public PersonalRequest confirm() {
+        this.status = PersonalRequestStatus.CONFIRMED;
         return this;
     }
 

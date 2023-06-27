@@ -12,7 +12,7 @@ import java.util.Optional;
 
 @NoArgsConstructor
 @Data
-public class PersonalRequest {
+public class PersonalRequestDTO {
 
     private Long id;
     private String tenantId;
