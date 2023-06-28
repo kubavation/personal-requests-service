@@ -9,8 +9,10 @@ import com.durys.jakub.personalrequestsservice.personalrequests.domain.events.Pe
 import com.durys.jakub.personalrequestsservice.personalrequests.infrastructure.PersonalRequestFieldConverter;
 import com.durys.jakub.personalrequestsservice.personalrequests.infrastructure.PersonalRequestRepository;
 import com.durys.jakub.personalrequestsservice.personalrequests.infrastructure.model.PersonalRequestDTO;
+import com.durys.jakub.personalrequestsservice.personalrequests.infrastructure.model.PersonalRequestRejectionReason;
 import com.durys.jakub.personalrequestsservice.requestypes.domain.RequestTypeField;
 import com.durys.jakub.personalrequestsservice.requestypes.infrastructure.RequestTypeRepository;
+import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -69,6 +71,18 @@ public class PersonalRequestApplicationService {
                 .forEach(this::emitPersonalRequestStatusChangedEvent);
     }
 
+    public void reject(Set<PersonalRequestRejectionReason> rejectionReasons) {
+
+        Set<PersonalRequest> requests = rejectionReasons.stream()
+                .map(reason ->
+                        personalRequestRepository.findById(reason.getRequestId())
+                                .map(request -> request.reject(reason.getReason()))
+                                .orElseThrow(() -> new RuntimeException("entity not found")))
+                .collect(Collectors.toSet());
+
+        personalRequestRepository.saveAll(requests)
+                .forEach(this::emitPersonalRequestStatusChangedEvent);
+    }
 
     private void emitPersonalRequestStatusChangedEvent(PersonalRequest request) {
         eventPublisher.publish(

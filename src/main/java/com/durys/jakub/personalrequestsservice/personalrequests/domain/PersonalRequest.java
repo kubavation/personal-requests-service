@@ -1,5 +1,6 @@
 package com.durys.jakub.personalrequestsservice.personalrequests.domain;
 
+import com.durys.jakub.personalrequestsservice.personalrequests.domain.exception.StatusInvalidForOperationException;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -27,6 +28,12 @@ public class PersonalRequest {
 
     @Column(name = "supervisor_id")
     private String supervisorId;
+
+    @Column(name = "rejection_reason")
+    private String rejectionReason;
+
+    @Column(name = "acceptation_level")
+    private Integer acceptationLevel;
 
     @Enumerated(EnumType.STRING)
     private PersonalRequestStatus status;
@@ -57,13 +64,36 @@ public class PersonalRequest {
     }
 
     public PersonalRequest sendTo(String supervisorId) {
+
+        if (status != PersonalRequestStatus.NEW && status != PersonalRequestStatus.REJECTED) {
+            throw new StatusInvalidForOperationException();
+        }
+
         this.supervisorId = supervisorId;
         this.status = PersonalRequestStatus.SENT_FOR_ACCEPTATION;
+        this.acceptationLevel++;
         return this;
     }
 
     public PersonalRequest confirm() {
+
+        if (status != PersonalRequestStatus.SENT_FOR_ACCEPTATION) {
+            throw new StatusInvalidForOperationException();
+        }
+
         this.status = PersonalRequestStatus.CONFIRMED;
+        return this;
+    }
+
+    public PersonalRequest reject(String reason) {
+
+        if (status != PersonalRequestStatus.SENT_FOR_ACCEPTATION) {
+            throw new StatusInvalidForOperationException();
+        }
+
+        this.status = PersonalRequestStatus.REJECTED;
+        this.rejectionReason = reason;
+        this.acceptationLevel = 0;
         return this;
     }
 
