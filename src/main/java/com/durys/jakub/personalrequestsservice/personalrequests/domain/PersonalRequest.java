@@ -28,6 +28,9 @@ public class PersonalRequest {
     @Column(name = "supervisor_id")
     private String supervisorId;
 
+    @Column(name = "rejection_reason")
+    private String rejectionReason;
+
     @Enumerated(EnumType.STRING)
     private PersonalRequestStatus status;
 
@@ -64,6 +67,12 @@ public class PersonalRequest {
 
     public PersonalRequest confirm() {
         this.status = PersonalRequestStatus.CONFIRMED;
+        return this;
+    }
+
+    public PersonalRequest reject(String reason) {
+        this.status = PersonalRequestStatus.REJECTED;
+        this.rejectionReason = reason;
         return this;
     }
 
