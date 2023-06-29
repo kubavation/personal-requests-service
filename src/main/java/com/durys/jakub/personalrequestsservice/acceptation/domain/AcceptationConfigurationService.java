@@ -1,7 +1,5 @@
 package com.durys.jakub.personalrequestsservice.acceptation.domain;
 
-import com.durys.jakub.personalrequestsservice.acceptation.infrastructure.AcceptationConfigurationRepository;
-import com.durys.jakub.personalrequestsservice.acceptation.infrastructure.model.Supervisor;
 import com.durys.jakub.personalrequestsservice.personalrequests.domain.PersonalRequest;
 import com.durys.jakub.personalrequestsservice.personalrequests.domain.PersonalRequestStatus;
 import io.vavr.control.Either;

@@ -14,7 +14,7 @@ import java.time.LocalDate;
 @AllArgsConstructor
 @NoArgsConstructor
 @Table(name = "PR_ACCEPTATION_CONFIGURATION")
-public class AcceptationConfiguration {
+class AcceptationConfiguration {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

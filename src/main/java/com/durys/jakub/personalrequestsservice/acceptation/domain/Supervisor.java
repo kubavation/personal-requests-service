@@ -1,4 +1,4 @@
-package com.durys.jakub.personalrequestsservice.acceptation.infrastructure.model;
+package com.durys.jakub.personalrequestsservice.acceptation.domain;
 
 import lombok.Data;
 import lombok.NoArgsConstructor;

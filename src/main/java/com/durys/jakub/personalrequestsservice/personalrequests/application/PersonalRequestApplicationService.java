@@ -1,9 +1,6 @@
 package com.durys.jakub.personalrequestsservice.personalrequests.application;
 
 import com.durys.jakub.personalrequestsservice.acceptation.domain.AcceptationConfigurationService;
-import com.durys.jakub.personalrequestsservice.acceptation.domain.AcceptationResult;
-import com.durys.jakub.personalrequestsservice.acceptation.infrastructure.model.Supervisor;
-import com.durys.jakub.personalrequestsservice.context.ContextProvider;
 import com.durys.jakub.personalrequestsservice.events.DomainEventPublisher;
 import com.durys.jakub.personalrequestsservice.personalrequests.domain.PersonalRequest;
 import com.durys.jakub.personalrequestsservice.personalrequests.domain.PersonalRequestField;
@@ -15,8 +12,6 @@ import com.durys.jakub.personalrequestsservice.personalrequests.infrastructure.m
 import com.durys.jakub.personalrequestsservice.personalrequests.infrastructure.model.PersonalRequestRejectionReason;
 import com.durys.jakub.personalrequestsservice.requestypes.domain.RequestTypeField;
 import com.durys.jakub.personalrequestsservice.requestypes.infrastructure.RequestTypeRepository;
-import io.vavr.control.Either;
-import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

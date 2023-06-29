@@ -1,13 +1,11 @@
-package com.durys.jakub.personalrequestsservice.acceptation.infrastructure;
+package com.durys.jakub.personalrequestsservice.acceptation.domain;
 
-import com.durys.jakub.personalrequestsservice.acceptation.domain.AcceptationConfiguration;
-import com.durys.jakub.personalrequestsservice.acceptation.infrastructure.model.Supervisor;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
 import java.util.Optional;
 
-public interface AcceptationConfigurationRepository extends JpaRepository<AcceptationConfiguration, Long> {
+interface AcceptationConfigurationRepository extends JpaRepository<AcceptationConfiguration, Long> {
 
     @Query(value = "SELECT config.supervisor_id supervisorId from PR_ACCEPTATION_CONFIGURATION config " +
             " WHERE current_date between config.from and COALESCE(config.to, current_date) " +
