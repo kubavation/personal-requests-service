@@ -14,11 +14,6 @@ public class AcceptationConfigurationService {
 
     private final AcceptationConfigurationRepository repository;
 
-    public boolean confirmable(PersonalRequest request) {
-        return repository.maxAcceptationLevel(request.getTenantId())
-                .orElse(0)
-                .equals(request.getAcceptationLevel());
-    }
 
     public Either<AcceptationResult, Supervisor> supervisor(PersonalRequest request) {
 
@@ -31,6 +26,13 @@ public class AcceptationConfigurationService {
         return repository.supervisor(request.getTenantId(), request.getAcceptationLevel() + 1)
                 .<Either<AcceptationResult, Supervisor>>map(Either::right)
                 .orElseGet(() -> Either.left(AcceptationResult.SUPERVISOR_NOT_DEFINED));
+    }
+
+
+    private boolean confirmable(PersonalRequest request) {
+        return repository.maxAcceptationLevel(request.getTenantId())
+                .orElse(0)
+                .equals(request.getAcceptationLevel());
     }
 
 

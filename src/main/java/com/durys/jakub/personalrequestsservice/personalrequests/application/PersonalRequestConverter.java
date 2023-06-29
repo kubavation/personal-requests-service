@@ -2,6 +2,7 @@ package com.durys.jakub.personalrequestsservice.personalrequests.application;
 
 import com.durys.jakub.personalrequestsservice.personalrequests.domain.PersonalRequest;
 import com.durys.jakub.personalrequestsservice.personalrequests.domain.PersonalRequestAttachment;
+import com.durys.jakub.personalrequestsservice.personalrequests.domain.PersonalRequestStatus;
 import com.durys.jakub.personalrequestsservice.personalrequests.infrastructure.model.PersonalRequestDTO;
 import com.durys.jakub.personalrequestsservice.shared.Status;
 import lombok.AccessLevel;
@@ -22,7 +23,7 @@ class PersonalRequestConverter {
         return PersonalRequest.builder()
                 .requestTypeId(personalRequestDTO.getTypeId())
                 .tenantId(personalRequestDTO.getTenantId())
-                .status(Status.A)
+                .status(PersonalRequestStatus.NEW)
                 .build();
     }
 
