@@ -1,6 +1,6 @@
 package com.durys.jakub.personalrequestsservice.personalrequests.application;
 
-import com.durys.jakub.personalrequestsservice.context.ContextProvider;
+import com.durys.jakub.personalrequestsservice.acceptation.domain.AcceptationConfigurationService;
 import com.durys.jakub.personalrequestsservice.events.DomainEventPublisher;
 import com.durys.jakub.personalrequestsservice.personalrequests.domain.PersonalRequest;
 import com.durys.jakub.personalrequestsservice.personalrequests.domain.PersonalRequestField;
@@ -12,7 +12,6 @@ import com.durys.jakub.personalrequestsservice.personalrequests.infrastructure.m
 import com.durys.jakub.personalrequestsservice.personalrequests.infrastructure.model.PersonalRequestRejectionReason;
 import com.durys.jakub.personalrequestsservice.requestypes.domain.RequestTypeField;
 import com.durys.jakub.personalrequestsservice.requestypes.infrastructure.RequestTypeRepository;
-import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -31,10 +30,10 @@ import static com.durys.jakub.personalrequestsservice.personalrequests.applicati
 @Slf4j
 public class PersonalRequestApplicationService {
 
-    private final ContextProvider contextProvider;
     private final RequestTypeRepository requestTypeRepository;
     private final PersonalRequestRepository personalRequestRepository;
     private final DomainEventPublisher eventPublisher;
+    private final AcceptationConfigurationService acceptationConfiguration;
 
     @Transactional
     public void save(PersonalRequestDTO personalRequestDTO, List<MultipartFile> attachments) {
@@ -49,26 +48,28 @@ public class PersonalRequestApplicationService {
                 .publish(new PersonalRequestCreatedEvent(saved.getId(), saved.getTenantId()));
     }
 
-    public void sendTo(Set<Long> requestsId, String supervisorId) {
+    @Transactional
+    public void confirm(Set<Long> requestsId) {
 
         List<PersonalRequest> requests = personalRequestRepository.findAllById(requestsId)
                 .stream()
-                .map(request -> request.sendTo(supervisorId))
+                .map(this::confirm)
                 .toList();
 
         personalRequestRepository.saveAll(requests)
                 .forEach(this::emitPersonalRequestStatusChangedEvent);
     }
 
-    public void confirm(Set<Long> requestsId) {
+    private PersonalRequest confirm(PersonalRequest request) {
 
-        List<PersonalRequest> requests = personalRequestRepository.findAllById(requestsId)
-                .stream()
-                .map(PersonalRequest::confirm)
-                .toList();
+        return acceptationConfiguration.supervisor(request).fold(
+                acceptationResult -> switch (acceptationResult) {
+                    case ACCEPTABLE -> request.confirm();
+                    case SUPERVISOR_NOT_DEFINED -> throw new RuntimeException("Supervisor not defined");
+                },
+                supervisor -> request.sendTo(supervisor.getId())
+        );
 
-        personalRequestRepository.saveAll(requests)
-                .forEach(this::emitPersonalRequestStatusChangedEvent);
     }
 
     public void reject(Set<PersonalRequestRejectionReason> rejectionReasons) {
