@@ -33,7 +33,7 @@ public class PersonalRequest {
     private String rejectionReason;
 
     @Column(name = "acceptation_level")
-    private Integer acceptationLevel;
+    private AcceptationLevel acceptationLevel;
 
     @Enumerated(EnumType.STRING)
     private PersonalRequestStatus status;
@@ -70,8 +70,8 @@ public class PersonalRequest {
         }
 
         this.supervisorId = supervisorId;
-        this.status = PersonalRequestStatus.SENT_FOR_ACCEPTATION;
-        this.acceptationLevel++;
+        status = PersonalRequestStatus.SENT_FOR_ACCEPTATION;
+        acceptationLevel.increment();
         return this;
     }
 
@@ -81,7 +81,7 @@ public class PersonalRequest {
             throw new StatusInvalidForOperationException();
         }
 
-        this.status = PersonalRequestStatus.CONFIRMED;
+        status = PersonalRequestStatus.CONFIRMED;
         return this;
     }
 
@@ -91,9 +91,9 @@ public class PersonalRequest {
             throw new StatusInvalidForOperationException();
         }
 
-        this.status = PersonalRequestStatus.REJECTED;
-        this.rejectionReason = reason;
-        this.acceptationLevel = 0;
+        status = PersonalRequestStatus.REJECTED;
+        rejectionReason = reason;
+        acceptationLevel.reset();
         return this;
     }
 
