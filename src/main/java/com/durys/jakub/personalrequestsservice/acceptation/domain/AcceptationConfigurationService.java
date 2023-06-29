@@ -21,7 +21,7 @@ public class AcceptationConfigurationService {
                     : Either.left(AcceptationResult.ACCEPTABLE);
         }
 
-        return repository.supervisor(request.getTenantId(), request.getAcceptationLevel() + 1)
+        return repository.supervisor(request.getTenantId(), request.accaptationLevel() + 1)
                 .<Either<AcceptationResult, Supervisor>>map(Either::right)
                 .orElseGet(() -> Either.left(AcceptationResult.SUPERVISOR_NOT_DEFINED));
     }
