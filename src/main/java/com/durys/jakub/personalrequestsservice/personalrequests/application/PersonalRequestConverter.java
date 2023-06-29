@@ -4,7 +4,6 @@ import com.durys.jakub.personalrequestsservice.personalrequests.domain.PersonalR
 import com.durys.jakub.personalrequestsservice.personalrequests.domain.PersonalRequestAttachment;
 import com.durys.jakub.personalrequestsservice.personalrequests.domain.PersonalRequestStatus;
 import com.durys.jakub.personalrequestsservice.personalrequests.infrastructure.model.PersonalRequestDTO;
-import com.durys.jakub.personalrequestsservice.shared.Status;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 import org.springframework.web.multipart.MultipartFile;

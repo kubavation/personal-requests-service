@@ -21,4 +21,5 @@ class AcceptationLevel {
         this.level++;
         return this;
     }
+
 }

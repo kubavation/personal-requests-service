@@ -97,4 +97,8 @@ public class PersonalRequest {
         return this;
     }
 
+    public Integer accaptationLevel() {
+        return acceptationLevel.getLevel();
+    }
+
 }
