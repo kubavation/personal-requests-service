@@ -1,9 +1,14 @@
 package com.durys.jakub.personalrequestsservice.acceptation.domain;
 
 import com.durys.jakub.personalrequestsservice.acceptation.infrastructure.AcceptationConfigurationRepository;
+import com.durys.jakub.personalrequestsservice.acceptation.infrastructure.model.Supervisor;
 import com.durys.jakub.personalrequestsservice.personalrequests.domain.PersonalRequest;
+import com.durys.jakub.personalrequestsservice.personalrequests.domain.PersonalRequestStatus;
+import io.vavr.control.Either;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -17,6 +22,18 @@ public class AcceptationConfigurationService {
                 .equals(request.getAcceptationLevel());
     }
 
+    public Either<AcceptationResult, Supervisor> supervisor(PersonalRequest request) {
+
+        if (confirmable(request)) {
+            return PersonalRequestStatus.NEW.equals(request.getStatus())
+                    ? Either.left(AcceptationResult.SUPERVISOR_NOT_DEFINED)
+                    : Either.left(AcceptationResult.ACCEPTABLE);
+        }
+
+        return repository.supervisor(request.getTenantId(), request.getAcceptationLevel() + 1)
+                .<Either<AcceptationResult, Supervisor>>map(Either::right)
+                .orElseGet(() -> Either.left(AcceptationResult.SUPERVISOR_NOT_DEFINED));
+    }
 
 
 }
