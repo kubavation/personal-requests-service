@@ -30,7 +30,7 @@ public class AcceptationConfigurationService {
     private boolean confirmable(PersonalRequest request) {
         return repository.maxAcceptationLevel(request.getTenantId())
                 .orElse(0)
-                .equals(request.getAcceptationLevel());
+                .equals(request.accaptationLevel());
     }
 
 

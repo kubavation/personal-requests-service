@@ -4,6 +4,8 @@ import com.durys.jakub.personalrequestsservice.personalrequests.application.Pers
 import com.durys.jakub.personalrequestsservice.personalrequests.infrastructure.PersonalRequestAttachmentRepository;
 import com.durys.jakub.personalrequestsservice.personalrequests.infrastructure.model.PersonalRequestDTO;
 import com.durys.jakub.personalrequestsservice.personalrequests.domain.PersonalRequestAttachment;
+import com.durys.jakub.personalrequestsservice.personalrequests.infrastructure.model.PersonalRequestRejectionReason;
+import com.durys.jakub.personalrequestsservice.shared.exception.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.core.io.InputStreamResource;
@@ -16,6 +18,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.ByteArrayInputStream;
 import java.util.List;
+import java.util.Set;
 
 @Slf4j
 @RestController
@@ -37,11 +40,21 @@ public class PersonalRequestController {
         personalRequestApplicationService.save(personalRequestDTO, attachments);
     }
 
+    @PatchMapping("/confirmation")
+    void confirm(@RequestBody Set<Long> requestIds) {
+        personalRequestApplicationService.confirm(requestIds);
+    }
+
+    @PatchMapping("/rejection")
+    void reject(@RequestBody Set<PersonalRequestRejectionReason> rejectionReasons) {
+        personalRequestApplicationService.reject(rejectionReasons);
+    }
+
     @GetMapping("{requestId}/attachments/{attachmentId}")
     ResponseEntity<Resource> downloadAttachment(@PathVariable Long attachmentId) {
 
         PersonalRequestAttachment attachment = personalRequestAttachmentRepository.findById(attachmentId)
-                .orElseThrow(() -> new RuntimeException("entity not found"));
+                .orElseThrow(() -> new EntityNotFoundException(PersonalRequestAttachment.class, attachmentId));
 
         return ResponseEntity.ok()
                 .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + attachment.getFileName() + "\"")

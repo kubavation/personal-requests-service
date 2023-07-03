@@ -7,6 +7,7 @@ import com.durys.jakub.personalrequestsservice.requestcirculationhistory.domain.
 import com.durys.jakub.personalrequestsservice.requestcirculationhistory.domain.SupervisorAcceptationHistory;
 import com.durys.jakub.personalrequestsservice.requestcirculationhistory.infrastructure.PersonalRequestCirculationHistoryRepository;
 import com.durys.jakub.personalrequestsservice.requestcirculationhistory.infrastructure.SupervisorAcceptationHistoryRepository;
+import com.durys.jakub.personalrequestsservice.shared.exception.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.event.EventListener;
@@ -29,7 +30,7 @@ public class PersonalRequestStatusChangedEventHandler implements EventHandler<Pe
         PersonalRequestCirculationHistory history = personalRequestCirculationHistoryRepository.findById(event.requestId())
                 .map(requestHistory -> requestHistory.withHistory(PersonalRequestHistoryBuilder.buildFrom(event)))
                 .map(personalRequestCirculationHistoryRepository::save)
-                .orElseThrow(() -> new RuntimeException("todo"));
+                .orElseThrow(() -> new EntityNotFoundException(PersonalRequestCirculationHistory.class, event.requestId()));
 
 
         supervisorAcceptationHistoryRepository.findByRequestId(event.requestId())
@@ -59,3 +60,16 @@ public class PersonalRequestStatusChangedEventHandler implements EventHandler<Pe
     }
 
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
