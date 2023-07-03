@@ -63,19 +63,8 @@ public class PersonalRequestApplicationService {
                 .forEach(this::emitPersonalRequestStatusChangedEvent);
     }
 
-    private PersonalRequest confirm(PersonalRequest request) {
 
-        return acceptationConfiguration.supervisor(request)
-                .fold(
-                    acceptationResult -> switch (acceptationResult) {
-                        case ACCEPTABLE -> request.confirm();
-                        case SUPERVISOR_NOT_DEFINED -> throw new SupervisorNotDefinedException(request.getTenantId(), LocalDate.now());
-                    },
-                supervisor -> request.sendTo(supervisor.getId())
-        );
-
-    }
-
+    @Transactional
     public void reject(Set<PersonalRequestRejectionReason> rejectionReasons) {
 
         Set<PersonalRequest> requests = rejectionReasons.stream()
@@ -103,5 +92,19 @@ public class PersonalRequestApplicationService {
                         .convert(definition, personalRequestDTO.fieldValue(definition.getName())))
                 .collect(Collectors.toSet());
     }
+
+    private PersonalRequest confirm(PersonalRequest request) {
+
+        return acceptationConfiguration.supervisor(request)
+                .fold(
+                        acceptationResult -> switch (acceptationResult) {
+                            case ACCEPTABLE -> request.confirm();
+                            case SUPERVISOR_NOT_DEFINED -> throw new SupervisorNotDefinedException(request.getTenantId(), LocalDate.now());
+                        },
+                        supervisor -> request.sendTo(supervisor.getId())
+                );
+
+    }
+
 
 }
