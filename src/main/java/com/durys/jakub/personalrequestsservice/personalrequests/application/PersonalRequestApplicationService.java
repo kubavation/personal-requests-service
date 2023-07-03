@@ -97,13 +97,7 @@ public class PersonalRequestApplicationService {
 
     private Set<PersonalRequestField> fieldsFrom(PersonalRequestDTO personalRequestDTO) {
 
-        Set<RequestTypeField> fieldDefinitions = requestTypeRepository.fields(personalRequestDTO.getTypeId());
-
-        if (fieldDefinitions.size() != personalRequestDTO.getFields().size()) {
-            throw new RuntimeException("invalid field size");
-        }
-
-        return fieldDefinitions
+        return requestTypeRepository.fields(personalRequestDTO.getTypeId())
                 .stream()
                 .map(definition -> PersonalRequestFieldConverter
                         .convert(definition, personalRequestDTO.fieldValue(definition.getName())))
