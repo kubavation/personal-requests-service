@@ -1,6 +1,7 @@
 package com.durys.jakub.personalrequestsservice.personalrequests.application;
 
 import com.durys.jakub.personalrequestsservice.acceptation.domain.AcceptationConfigurationService;
+import com.durys.jakub.personalrequestsservice.acceptation.domain.exception.SupervisorNotDefinedException;
 import com.durys.jakub.personalrequestsservice.events.DomainEventPublisher;
 import com.durys.jakub.personalrequestsservice.personalrequests.domain.PersonalRequest;
 import com.durys.jakub.personalrequestsservice.personalrequests.domain.PersonalRequestField;
@@ -12,12 +13,14 @@ import com.durys.jakub.personalrequestsservice.personalrequests.infrastructure.m
 import com.durys.jakub.personalrequestsservice.personalrequests.infrastructure.model.PersonalRequestRejectionReason;
 import com.durys.jakub.personalrequestsservice.requestypes.domain.RequestTypeField;
 import com.durys.jakub.personalrequestsservice.requestypes.infrastructure.RequestTypeRepository;
+import com.durys.jakub.personalrequestsservice.shared.exception.EntityNotFoundException;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -62,11 +65,12 @@ public class PersonalRequestApplicationService {
 
     private PersonalRequest confirm(PersonalRequest request) {
 
-        return acceptationConfiguration.supervisor(request).fold(
-                acceptationResult -> switch (acceptationResult) {
-                    case ACCEPTABLE -> request.confirm();
-                    case SUPERVISOR_NOT_DEFINED -> throw new RuntimeException("Supervisor not defined");
-                },
+        return acceptationConfiguration.supervisor(request)
+                .fold(
+                    acceptationResult -> switch (acceptationResult) {
+                        case ACCEPTABLE -> request.confirm();
+                        case SUPERVISOR_NOT_DEFINED -> throw new SupervisorNotDefinedException(request.getTenantId(), LocalDate.now());
+                    },
                 supervisor -> request.sendTo(supervisor.getId())
         );
 
@@ -78,7 +82,7 @@ public class PersonalRequestApplicationService {
                 .map(reason ->
                         personalRequestRepository.findById(reason.getRequestId())
                                 .map(request -> request.reject(reason.getReason()))
-                                .orElseThrow(() -> new RuntimeException("entity not found")))
+                                .orElseThrow(() -> new EntityNotFoundException(PersonalRequest.class, reason.getRequestId())))
                 .collect(Collectors.toSet());
 
         personalRequestRepository.saveAll(requests)
