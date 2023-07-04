@@ -1,5 +1,9 @@
 package com.durys.jakub.personalrequestsservice.personalrequests.application;
 
+import com.durys.jakub.notificationclient.api.client.NotificationClient;
+import com.durys.jakub.notificationclient.api.model.Notification;
+import com.durys.jakub.notificationclient.api.model.NotificationType;
+import com.durys.jakub.notificationclient.api.model.TenantId;
 import com.durys.jakub.personalrequestsservice.acceptation.domain.AcceptationConfigurationService;
 import com.durys.jakub.personalrequestsservice.acceptation.domain.exception.SupervisorNotDefinedException;
 import com.durys.jakub.personalrequestsservice.events.DomainEventPublisher;
@@ -37,6 +41,7 @@ public class PersonalRequestApplicationService {
     private final PersonalRequestRepository personalRequestRepository;
     private final DomainEventPublisher eventPublisher;
     private final AcceptationConfigurationService acceptationConfiguration;
+    private final NotificationClient notificationClient;
 
     @Transactional
     public void save(PersonalRequestDTO personalRequestDTO, List<MultipartFile> attachments) {
@@ -61,6 +66,16 @@ public class PersonalRequestApplicationService {
 
         personalRequestRepository.saveAll(requests)
                 .forEach(this::emitPersonalRequestStatusChangedEvent);
+
+        requests
+                .forEach(request -> notificationClient.send(
+                        new Notification(
+                                new TenantId(request.getTenantId()),
+                                "Your request has been accepted",
+                                "Your request with id %d has been accepted".formatted(request.getId()),
+                                List.of(NotificationType.APP, NotificationType.EMAIL)
+                        )
+                ));
     }
 
 
