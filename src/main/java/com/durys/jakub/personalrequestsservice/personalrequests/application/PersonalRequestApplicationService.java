@@ -1,5 +1,9 @@
 package com.durys.jakub.personalrequestsservice.personalrequests.application;
 
+import com.durys.jakub.notificationclient.api.client.NotificationClient;
+import com.durys.jakub.notificationclient.api.model.Notification;
+import com.durys.jakub.notificationclient.api.model.NotificationType;
+import com.durys.jakub.notificationclient.api.model.TenantId;
 import com.durys.jakub.personalrequestsservice.acceptation.domain.AcceptationConfigurationService;
 import com.durys.jakub.personalrequestsservice.acceptation.domain.exception.SupervisorNotDefinedException;
 import com.durys.jakub.personalrequestsservice.events.DomainEventPublisher;
@@ -21,6 +25,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.time.LocalDate;
+import java.util.Collection;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -37,6 +42,7 @@ public class PersonalRequestApplicationService {
     private final PersonalRequestRepository personalRequestRepository;
     private final DomainEventPublisher eventPublisher;
     private final AcceptationConfigurationService acceptationConfiguration;
+    private final NotificationClient notificationClient;
 
     @Transactional
     public void save(PersonalRequestDTO personalRequestDTO, List<MultipartFile> attachments) {
@@ -59,8 +65,19 @@ public class PersonalRequestApplicationService {
                 .map(this::confirm)
                 .toList();
 
-        personalRequestRepository.saveAll(requests)
-                .forEach(this::emitPersonalRequestStatusChangedEvent);
+        List<PersonalRequest> saved = personalRequestRepository.saveAll(requests);
+
+        emitPersonalStatusChangedEventFor(saved);
+
+        saved
+                .forEach(request -> notificationClient.send(
+                        new Notification(
+                                new TenantId(request.getTenantId()),
+                                "Your request has been accepted",
+                                "Your request with id %d has been accepted".formatted(request.getId()),
+                                List.of(NotificationType.APP, NotificationType.EMAIL)
+                        )
+                ));
     }
 
 
@@ -74,14 +91,21 @@ public class PersonalRequestApplicationService {
                                 .orElseThrow(() -> new EntityNotFoundException(PersonalRequest.class, reason.getRequestId())))
                 .collect(Collectors.toSet());
 
-        personalRequestRepository.saveAll(requests)
-                .forEach(this::emitPersonalRequestStatusChangedEvent);
+        List<PersonalRequest> saved = personalRequestRepository.saveAll(requests);
+
+        emitPersonalStatusChangedEventFor(saved);
+
+        requests
+                .forEach(request -> notificationClient.send(
+                        new Notification(
+                                new TenantId(request.getTenantId()),
+                                "Your request has been rejected",
+                                "Your request with id %d has been rejected".formatted(request.getId()),
+                                List.of(NotificationType.APP, NotificationType.EMAIL)
+                        )
+                ));
     }
 
-    private void emitPersonalRequestStatusChangedEvent(PersonalRequest request) {
-        eventPublisher.publish(
-                new PersonalRequestStatusChangedEvent(request.getId(), request.getSupervisorId(), request.getStatus()));
-    }
 
 
     private Set<PersonalRequestField> fieldsFrom(PersonalRequestDTO personalRequestDTO) {
@@ -103,8 +127,17 @@ public class PersonalRequestApplicationService {
                         },
                         supervisor -> request.sendTo(supervisor.getId())
                 );
-
     }
 
+    private void emitPersonalStatusChangedEventFor(Collection<PersonalRequest> requests) {
+        requests
+                .forEach(this::emitPersonalRequestStatusChangedEvent);
+    }
+
+
+    private void emitPersonalRequestStatusChangedEvent(PersonalRequest request) {
+        eventPublisher.publish(
+                new PersonalRequestStatusChangedEvent(request.getId(), request.getSupervisorId(), request.getStatus()));
+    }
 
 }
