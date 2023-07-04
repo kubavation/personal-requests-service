@@ -25,6 +25,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.time.LocalDate;
+import java.util.Collection;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -64,10 +65,11 @@ public class PersonalRequestApplicationService {
                 .map(this::confirm)
                 .toList();
 
-        personalRequestRepository.saveAll(requests)
-                .forEach(this::emitPersonalRequestStatusChangedEvent);
+        List<PersonalRequest> saved = personalRequestRepository.saveAll(requests);
 
-        requests
+        emitPersonalStatusChangedEventFor(saved);
+
+        saved
                 .forEach(request -> notificationClient.send(
                         new Notification(
                                 new TenantId(request.getTenantId()),
@@ -89,8 +91,9 @@ public class PersonalRequestApplicationService {
                                 .orElseThrow(() -> new EntityNotFoundException(PersonalRequest.class, reason.getRequestId())))
                 .collect(Collectors.toSet());
 
-        personalRequestRepository.saveAll(requests)
-                .forEach(this::emitPersonalRequestStatusChangedEvent);
+        List<PersonalRequest> saved = personalRequestRepository.saveAll(requests);
+
+        emitPersonalStatusChangedEventFor(saved);
 
         requests
                 .forEach(request -> notificationClient.send(
@@ -103,10 +106,6 @@ public class PersonalRequestApplicationService {
                 ));
     }
 
-    private void emitPersonalRequestStatusChangedEvent(PersonalRequest request) {
-        eventPublisher.publish(
-                new PersonalRequestStatusChangedEvent(request.getId(), request.getSupervisorId(), request.getStatus()));
-    }
 
 
     private Set<PersonalRequestField> fieldsFrom(PersonalRequestDTO personalRequestDTO) {
@@ -128,8 +127,17 @@ public class PersonalRequestApplicationService {
                         },
                         supervisor -> request.sendTo(supervisor.getId())
                 );
-
     }
 
+    private void emitPersonalStatusChangedEventFor(Collection<PersonalRequest> requests) {
+        requests
+                .forEach(this::emitPersonalRequestStatusChangedEvent);
+    }
+
+
+    private void emitPersonalRequestStatusChangedEvent(PersonalRequest request) {
+        eventPublisher.publish(
+                new PersonalRequestStatusChangedEvent(request.getId(), request.getSupervisorId(), request.getStatus()));
+    }
 
 }
