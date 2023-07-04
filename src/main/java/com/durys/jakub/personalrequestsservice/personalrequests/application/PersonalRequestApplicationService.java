@@ -91,6 +91,16 @@ public class PersonalRequestApplicationService {
 
         personalRequestRepository.saveAll(requests)
                 .forEach(this::emitPersonalRequestStatusChangedEvent);
+
+        requests
+                .forEach(request -> notificationClient.send(
+                        new Notification(
+                                new TenantId(request.getTenantId()),
+                                "Your request has been rejected",
+                                "Your request with id %d has been rejected".formatted(request.getId()),
+                                List.of(NotificationType.APP, NotificationType.EMAIL)
+                        )
+                ));
     }
 
     private void emitPersonalRequestStatusChangedEvent(PersonalRequest request) {
