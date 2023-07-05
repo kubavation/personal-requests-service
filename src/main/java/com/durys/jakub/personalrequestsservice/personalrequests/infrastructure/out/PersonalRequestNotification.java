@@ -1,6 +1,6 @@
 package com.durys.jakub.personalrequestsservice.personalrequests.infrastructure.out;
 
-public enum PersonalRequestNotification {
+enum PersonalRequestNotification {
     REJECTION("Your request with id %d has been rejected"),
     CONFIRMATION("Your request with id %d has been confirmed"),
     SENT_FOR_ACCEPTATION("Request with id %d has been sent for acceptation");

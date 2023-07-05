@@ -15,7 +15,7 @@ import java.util.List;
 @Component
 @RequiredArgsConstructor
 public class PersonalRequestNotificationService {
-
+    
     private final NotificationClient notificationClient;
 
     public void notify(PersonalRequest request) {
