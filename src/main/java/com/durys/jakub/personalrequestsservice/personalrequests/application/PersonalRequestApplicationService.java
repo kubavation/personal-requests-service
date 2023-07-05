@@ -15,6 +15,7 @@ import com.durys.jakub.personalrequestsservice.personalrequests.infrastructure.P
 import com.durys.jakub.personalrequestsservice.personalrequests.infrastructure.PersonalRequestRepository;
 import com.durys.jakub.personalrequestsservice.personalrequests.infrastructure.model.PersonalRequestDTO;
 import com.durys.jakub.personalrequestsservice.personalrequests.infrastructure.model.PersonalRequestRejectionReason;
+import com.durys.jakub.personalrequestsservice.personalrequests.infrastructure.out.PersonalRequestNotificationService;
 import com.durys.jakub.personalrequestsservice.requestypes.domain.RequestTypeField;
 import com.durys.jakub.personalrequestsservice.requestypes.infrastructure.RequestTypeRepository;
 import com.durys.jakub.personalrequestsservice.shared.exception.EntityNotFoundException;
@@ -42,7 +43,7 @@ public class PersonalRequestApplicationService {
     private final PersonalRequestRepository personalRequestRepository;
     private final DomainEventPublisher eventPublisher;
     private final AcceptationConfigurationService acceptationConfiguration;
-    private final NotificationClient notificationClient;
+    private final PersonalRequestNotificationService personalRequestNotificationService;
 
     @Transactional
     public void save(PersonalRequestDTO personalRequestDTO, List<MultipartFile> attachments) {
@@ -69,15 +70,7 @@ public class PersonalRequestApplicationService {
 
         emitPersonalStatusChangedEventFor(saved);
 
-        saved
-                .forEach(request -> notificationClient.send(
-                        new Notification(
-                                new TenantId(request.getTenantId()),
-                                "Your request has been accepted",
-                                "Your request with id %d has been accepted".formatted(request.getId()),
-                                List.of(NotificationType.APP, NotificationType.EMAIL)
-                        )
-                ));
+        personalRequestNotificationService.notify(saved);
     }
 
 
@@ -95,15 +88,7 @@ public class PersonalRequestApplicationService {
 
         emitPersonalStatusChangedEventFor(saved);
 
-        requests
-                .forEach(request -> notificationClient.send(
-                        new Notification(
-                                new TenantId(request.getTenantId()),
-                                "Your request has been rejected",
-                                "Your request with id %d has been rejected".formatted(request.getId()),
-                                List.of(NotificationType.APP, NotificationType.EMAIL)
-                        )
-                ));
+        personalRequestNotificationService.notify(saved);
     }
 
 
